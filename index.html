@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Global Migration to Australia</title>
+  <!-- Vega & Vega-Lite libraries -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
@@ -11,16 +12,72 @@
 
   <h1>Global Migration Flows into Australia</h1>
   <p>
-    This visualization shows where migrants are coming from globally,
-    and a zoom into Australia’s immigration breakdown.
+    This project visualises where migrants are coming from globally,
+    and then zooms into Australia’s immigration breakdown.
   </p>
 
-  <h2>🌍 World View</h2>
+  <!-- World Map -->
+  <h2>🌍 World Migration to Australia</h2>
   <div id="worldMap"></div>
 
-  <h2>🇦🇺 Australia Zoom</h2>
+  <!-- Australia Chart -->
+  <h2>🇦🇺 Australia’s Top Source Countries</h2>
   <div id="ausChart"></div>
 
-  <script src="script.js"></script>
+  <script type="text/javascript">
+    // World Map (Bubble Overlay)
+    const worldMapSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 800,
+      "height": 450,
+      "projection": {"type": "equirectangular"},
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/vega/vega/main/docs/data/world-110m.json",
+            "format": {"type": "topojson", "feature": "countries"}
+          },
+          "mark": {"type": "geoshape", "fill": "#eee", "stroke": "lightgray"}
+        },
+        {
+          "data": {"url": "data/world_migration.csv"},
+          "mark": {"type": "circle", "opacity": 0.7, "stroke": "black", "strokeWidth": 0.5},
+          "encoding": {
+            "longitude": {"field": "lon", "type": "quantitative"},
+            "latitude": {"field": "lat", "type": "quantitative"},
+            "size": {"field": "migrants", "type": "quantitative", "scale": {"range": [0, 2000]}},
+            "color": {"value": "steelblue"},
+            "tooltip": [
+              {"field": "origin_country", "type": "nominal", "title": "Origin"},
+              {"field": "migrants", "type": "quantitative", "title": "Migrants"}
+            ]
+          }
+        }
+      ]
+    };
+
+    // Australia Bar Chart
+    const ausChartSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 600,
+      "height": 400,
+      "data": {"url": "data/aus_migration.csv"},
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "origin_country", "type": "nominal", "sort": "-y", "title": "Origin Country"},
+        "y": {"field": "migrants", "type": "quantitative", "title": "Number of Migrants"},
+        "tooltip": [
+          {"field": "origin_country", "type": "nominal"},
+          {"field": "migrants", "type": "quantitative"}
+        ],
+        "color": {"value": "darkorange"}
+      }
+    };
+
+    // Embed into page
+    vegaEmbed('#worldMap', worldMapSpec);
+    vegaEmbed('#ausChart', ausChartSpec);
+  </script>
+
 </body>
 </html>
