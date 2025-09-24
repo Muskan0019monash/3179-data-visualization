@@ -1,7 +1,7 @@
-// Import VegaEmbed (make sure you included the script in HTML or installed it via npm)
+// Importing VegaEmbed (included the script in HTML)
 // <script src="https://cdn.jsdelivr.net/npm/vega-embed"></script>
 
-// Define the Vega-Lite specification
+// Defining the Vega-Lite specification
 const spec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json", 
   // Schema version - tells Vega-Lite how to read this
@@ -18,9 +18,9 @@ const spec = {
       // First layer: the background world map
       data: {
         url: "https://raw.githubusercontent.com/vega/vega/main/docs/data/world-110m.json",
-        // Load map data from Vega’s GitHub
+        // Loading map data from Vega’s GitHub
         format: { type: "topojson", feature: "countries" }
-        // Tell Vega that this is topojson and we want "countries"
+        // this is topojson and we want "countries"
       },
       mark: "geoshape"
       // Draw shapes for countries
@@ -35,10 +35,10 @@ const spec = {
 
       encoding: {
         longitude: { field: "lon", type: "quantitative" },
-        // Use longitude from CSV for x position
+        // Using longitude from CSV for x position
 
         latitude: { field: "lat", type: "quantitative" },
-        // Use latitude from CSV for y position
+        // Using latitude from CSV for y position
 
         size: { field: "migrants", type: "quantitative" },
         // Circle size = number of migrants
