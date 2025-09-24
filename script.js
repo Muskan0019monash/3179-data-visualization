@@ -1,53 +1,60 @@
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json", 
-  // This tells Vega-Lite what version/schema we are using
+// Import VegaEmbed (make sure you included the script in HTML or installed it via npm)
+// <script src="https://cdn.jsdelivr.net/npm/vega-embed"></script>
 
-  "width": 800,
-  "height": 450,
-  // Set the width and height of the chart
+// Define the Vega-Lite specification
+const spec = {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json", 
+  // Schema version - tells Vega-Lite how to read this
 
-  "projection": {"type": "equirectangular"},
-  // The map projection (how the world is shown flat)
+  width: 800,
+  height: 450,
+  // Size of the chart
 
-  "layer": [
+  projection: { type: "equirectangular" },
+  // Projection means how the globe is "flattened" into 2D
+
+  layer: [
     {
-      // First layer: draw the world map
-      "data": {
-        "url": "https://raw.githubusercontent.com/vega/vega/main/docs/data/world-110m.json",
-        // Get the world map data (topojson format)
-        "format": {"type": "topojson", "feature": "countries"}
-        // Tell Vega-Lite this is topojson and we want the countries
+      // First layer: the background world map
+      data: {
+        url: "https://raw.githubusercontent.com/vega/vega/main/docs/data/world-110m.json",
+        // Load map data from Vega’s GitHub
+        format: { type: "topojson", feature: "countries" }
+        // Tell Vega that this is topojson and we want "countries"
       },
-      "mark": "geoshape" 
-      // Draw the shapes of the countries
+      mark: "geoshape"
+      // Draw shapes for countries
     },
     {
-      // Second layer: plot migration data points
-      "data": {"url": "data/world_migration.csv"},
-      // Use my CSV file with migration data
+      // Second layer: migration points
+      data: { url: "data/world_migration.csv" },
+      // Load my migration dataset (CSV)
 
-      "mark": "circle",
-      // Each data point is a circle
+      mark: "circle",
+      // Each migration record is shown as a circle
 
-      "encoding": {
-        "longitude": {"field": "lon", "type": "quantitative"},
-        // Use 'lon' column for longitude (x position on map)
+      encoding: {
+        longitude: { field: "lon", type: "quantitative" },
+        // Use longitude from CSV for x position
 
-        "latitude": {"field": "lat", "type": "quantitative"},
-        // Use 'lat' column for latitude (y position on map)
+        latitude: { field: "lat", type: "quantitative" },
+        // Use latitude from CSV for y position
 
-        "size": {"field": "migrants", "type": "quantitative"},
-        // Circle size shows number of migrants
+        size: { field: "migrants", type: "quantitative" },
+        // Circle size = number of migrants
 
-        "color": {"value": "blue"},
-        // All circles are colored blue
+        color: { value: "blue" },
+        // All circles are blue
 
-        "tooltip": [
-          {"field": "origin_country"},
-          {"field": "migrants"}
+        tooltip: [
+          { field: "origin_country" },
+          { field: "migrants" }
         ]
-        // When I hover, show country and migrant number
+        // Show country + migrant number on hover
       }
     }
   ]
-}
+};
+
+// Render the chart into a div with id="vis"
+vegaEmbed("#vis", spec);
