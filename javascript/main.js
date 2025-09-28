@@ -1,7 +1,7 @@
 // main.js
 // World map of migrants to Australia — clean white landmass, black borders, red bubbles
 
-const csvUrl = "dataset/migration.csv"; // dataset path
+const csvUrl = "Dataset/migration.csv"; // dataset path
 
 const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
