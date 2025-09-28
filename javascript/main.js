@@ -1,23 +1,23 @@
 // main.js
-// World map of migrants to Australia with styling improvements
+// World map of migrants to Australia with darker landmass + red bubbles
 
-const csvUrl = "Dataset/migration.csv"; // dataset path updated
+const csvUrl = "Dataset/migration.csv"; // dataset path
 
 const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
   "height": 600,
-  "background": "#eef6fb", // match page background
+  "background": "#a3c9f7", // ocean-like light blue background
   "projection": { "type": "equirectangular" },
 
   "layer": [
-    // 1) Base world map (landmass highlighted)
+    // 1) Base world map (landmass darker green)
     {
       "data": {
         "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
         "format": { "type": "topojson", "feature": "countries" }
       },
-      "mark": { "type": "geoshape", "fill": "#d9e6c3", "stroke": "#888" }
+      "mark": { "type": "geoshape", "fill": "#4a7c59", "stroke": "#222" }
     },
 
     // 2) Graticule (latitude/longitude grid)
@@ -26,13 +26,13 @@ const spec = {
       "mark": { "type": "geoshape", "stroke": "#cccccc", "strokeWidth": 0.5 }
     },
 
-    // 3) Migration proportional circles
+    // 3) Migration proportional circles (red color scale)
     {
       "data": { "url": csvUrl, "format": { "type": "csv" } },
       "transform": [
         { "calculate": "toNumber(datum.migrants)", "as": "migrants_num" }
       ],
-      "mark": { "type": "circle", "opacity": 0.75, "stroke": "#222", "strokeWidth": 0.3 },
+      "mark": { "type": "circle", "opacity": 0.8, "stroke": "#222", "strokeWidth": 0.4 },
       "encoding": {
         "longitude": { "field": "lon", "type": "quantitative" },
         "latitude": { "field": "lat", "type": "quantitative" },
@@ -42,11 +42,11 @@ const spec = {
           "scale": { "range": [100, 3000] },
           "legend": { "title": "Migrants" }
         },
-        // Color scale instead of one solid color
+        // Red color scale for contrast
         "color": {
           "field": "migrants_num",
           "type": "quantitative",
-          "scale": { "scheme": "blues" },
+          "scale": { "scheme": "reds" },
           "legend": { "title": "Migrants" }
         },
         "tooltip": [
