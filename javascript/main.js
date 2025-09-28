@@ -1,5 +1,5 @@
 // main.js
-// World map of migrants to Australia with darker landmass + red bubbles
+// World map of migrants to Australia — clean white landmass, black borders, red bubbles
 
 const csvUrl = "Dataset/migration.csv"; // dataset path
 
@@ -7,32 +7,26 @@ const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
   "height": 600,
-  "background": "#a3c9f7", // ocean-like light blue background
+  "background": "#a3c9f7", // light blue ocean background
   "projection": { "type": "equirectangular" },
 
   "layer": [
-    // 1) Base world map (landmass darker green)
+    // 1) Base world map (white landmass + black borders)
     {
       "data": {
         "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
         "format": { "type": "topojson", "feature": "countries" }
       },
-      "mark": { "type": "geoshape", "fill": "#4a7c59", "stroke": "#222" }
+      "mark": { "type": "geoshape", "fill": "white", "stroke": "black", "strokeWidth": 0.8 }
     },
 
-    // 2) Graticule (latitude/longitude grid)
-    {
-      "data": { "graticule": { "step": [30, 30] } },
-      "mark": { "type": "geoshape", "stroke": "#cccccc", "strokeWidth": 0.5 }
-    },
-
-    // 3) Migration proportional circles (red color scale)
+    // 2) Migration proportional circles (red color scale)
     {
       "data": { "url": csvUrl, "format": { "type": "csv" } },
       "transform": [
         { "calculate": "toNumber(datum.migrants)", "as": "migrants_num" }
       ],
-      "mark": { "type": "circle", "opacity": 0.8, "stroke": "#222", "strokeWidth": 0.4 },
+      "mark": { "type": "circle", "opacity": 0.85, "stroke": "#222", "strokeWidth": 0.4 },
       "encoding": {
         "longitude": { "field": "lon", "type": "quantitative" },
         "latitude": { "field": "lat", "type": "quantitative" },
@@ -42,7 +36,6 @@ const spec = {
           "scale": { "range": [100, 3000] },
           "legend": { "title": "Migrants" }
         },
-        // Red color scale for contrast
         "color": {
           "field": "migrants_num",
           "type": "quantitative",
