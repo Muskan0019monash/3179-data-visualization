@@ -1,7 +1,7 @@
 // main.js
 // World map of migrants to Australia with styling improvements
 
-const csvUrl = "migration.csv"; // relative path
+const csvUrl = "Dataset/migration.csv"; // dataset path updated
 
 const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -46,7 +46,7 @@ const spec = {
         "color": {
           "field": "migrants_num",
           "type": "quantitative",
-          "scale": { "scheme": "blues" }, 
+          "scale": { "scheme": "blues" },
           "legend": { "title": "Migrants" }
         },
         "tooltip": [
@@ -55,12 +55,7 @@ const spec = {
         ]
       }
     }
-  ],
-
-  "title": {
-    "text": "",
-    "anchor": "middle"
-  }
+  ]
 };
 
 vegaEmbed('#vis', spec, { actions: false })
