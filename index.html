@@ -1,82 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Migration Flow Map</title>
-  <!-- Load Vega & Vega-Lite -->
+  <meta charset="utf-8" />
+  <title>Migration to Australia — World Map</title>
+
+  <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fafafa;
     }
     #vis {
-      display: flex;
-      justify-content: center;
+      width: 100%;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <h1>Global Migration Map</h1>
   <div id="vis"></div>
-
-  <script>
-    // Vega-Lite spec for a world map
-    const spec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "width": 900,
-      "height": 500,
-      "projection": {"type": "equalEarth"},  // nice world map projection
-
-      "layer": [
-        {
-          // Base world map
-          "data": {
-            "url": "https://raw.githubusercontent.com/vega/vega-datasets/master/data/world-110m.json",
-            "format": {"type": "topojson", "feature": "countries"}
-          },
-          "mark": {
-            "type": "geoshape",
-            "fill": "#e0e0e0",
-            "stroke": "white"
-          }
-        },
-        {
-          // Graticule (latitude/longitude lines)
-          "data": {
-            "graticule": {"step": [30, 30]}
-          },
-          "mark": {"type": "geoshape", "stroke": "#aaa", "strokeWidth": 0.5}
-        },
-        {
-          // Your migration dataset (replace with your GitHub raw CSV link)
-          "data": {
-            "url": "https://raw.githubusercontent.com/username/repo-name/branch/dataset/migration.csv"
-          },
-          "mark": "circle",
-          "encoding": {
-            "longitude": {"field": "lon", "type": "quantitative"},
-            "latitude": {"field": "lat", "type": "quantitative"},
-            "size": {"field": "Migrants", "type": "quantitative"},
-            "color": {"field": "Origin", "type": "nominal"},
-            "tooltip": [
-              {"field": "Origin", "type": "nominal"},
-              {"field": "Destination", "type": "nominal"},
-              {"field": "Migrants", "type": "quantitative"}
-            ]
-          }
-        }
-      ]
-    };
-
-    // Embed visualization
-    vegaEmbed('#vis', spec);
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>
