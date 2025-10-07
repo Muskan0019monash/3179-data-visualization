@@ -3,7 +3,7 @@ body {
   font-family: system-ui, sans-serif;
   margin: 0;
   padding: 0;
-  background: #eef6fb; /* soft ocean-like background */
+  background: #eef6fb;
   color: #111;
   display: flex;
   flex-direction: column;
@@ -14,36 +14,110 @@ body {
 header {
   text-align: center;
   padding: 16px;
-  background: #003366; /* dark navy header */
+  background: #003366;
   color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 header h1 {
-  font-size: 28px; /* larger heading */
+  font-size: 28px;
   margin: 0;
 }
-
-/* Visualization container */
-#vis {
-  flex: 1;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 12px;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  border-radius: 8px;
+header p {
+  margin: 8px 0 0;
+  font-size: 16px;
+  opacity: 0.9;
 }
 
-/* Footer note under the chart */
+/* Dashboard layout */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.dashboard-title {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #003366;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.chart-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #003366;
+  text-align: center;
+}
+
+#world-map {
+  grid-column: 1;
+  grid-row: 2;
+  height: 500px;
+}
+
+#time-trend {
+  grid-column: 2;
+  grid-row: 2;
+  height: 500px;
+}
+
+#visa-breakdown {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  height: 400px;
+}
+
+/* Footer */
 footer {
   text-align: center;
-  padding: 10px;
+  padding: 15px;
   font-size: 14px;
   background: #f9f9f9;
   border-top: 1px solid #ddd;
+  margin-top: 20px;
 }
 footer .legend-note {
   margin: 0;
   color: #444;
   font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  
+  #world-map, #time-trend, #visa-breakdown {
+    grid-column: 1;
+  }
+  
+  #world-map {
+    grid-row: 2;
+  }
+  
+  #time-trend {
+    grid-row: 3;
+  }
+  
+  #visa-breakdown {
+    grid-row: 4;
+  }
 }

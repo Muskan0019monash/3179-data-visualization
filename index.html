@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Migration to Australia — World Map</title>
+  <title>Migration to Australia — Interactive Dashboard</title>
 
   <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -14,15 +14,31 @@
 </head>
 <body>
   <header>
-    <h1>Global Origins of Migrants to Australia</h1>
+    <h1>Migration to Australia — Interactive Dashboard</h1>
+    <p>Exploring migrant origins, trends over time, and visa categories</p>
   </header>
 
-  <main>
-    <div id="vis"></div>
+  <main class="dashboard">
+    <div class="dashboard-title">Migration Patterns Analysis</div>
+    
+    <div class="chart-container" id="world-map">
+      <div class="chart-title">Global Origins of Migrants to Australia</div>
+      <div id="map-vis"></div>
+    </div>
+    
+    <div class="chart-container" id="time-trend">
+      <div class="chart-title">Migration Trends Over Time</div>
+      <div id="trend-vis"></div>
+    </div>
+    
+    <div class="chart-container" id="visa-breakdown">
+      <div class="chart-title">Migration by Visa and Citizenship Categories</div>
+      <div id="visa-vis"></div>
+    </div>
   </main>
 
   <footer>
-    <p class="legend-note">Circle size = number of migrants (from migration.csv)</p>
+    <p class="legend-note">Data Sources: Australian Bureau of Statistics, OECD, UN DESA</p>
   </footer>
 
   <!-- External JS -->
