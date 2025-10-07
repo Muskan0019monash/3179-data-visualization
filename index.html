@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Migration to Australia — Interactive Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migration to Australia — Interactive World Map</title>
 
   <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -14,31 +15,19 @@
 </head>
 <body>
   <header>
-    <h1>Migration to Australia — Interactive Dashboard</h1>
-    <p>Exploring migrant origins, trends over time, and visa categories</p>
+    <h1>Global Migration to Australia</h1>
+    <p class="subtitle">Interactive analysis of migrant origins and distribution</p>
   </header>
 
-  <main class="dashboard">
-    <div class="dashboard-title">Migration Patterns Analysis</div>
-    
-    <div class="chart-container" id="world-map">
-      <div class="chart-title">Global Origins of Migrants to Australia</div>
-      <div id="map-vis"></div>
-    </div>
-    
-    <div class="chart-container" id="time-trend">
-      <div class="chart-title">Migration Trends Over Time</div>
-      <div id="trend-vis"></div>
-    </div>
-    
-    <div class="chart-container" id="visa-breakdown">
-      <div class="chart-title">Migration by Visa and Citizenship Categories</div>
-      <div id="visa-vis"></div>
+  <main>
+    <div id="vis">
+      <div class="loading">Loading migration data visualization...</div>
     </div>
   </main>
 
   <footer>
-    <p class="legend-note">Data Sources: Australian Bureau of Statistics, OECD, UN DESA</p>
+    <p class="legend-note">Circle size represents number of migrants • Hover for details</p>
+    <p class="data-source">Data Source: Australian Bureau of Statistics & UN Migration Data</p>
   </footer>
 
   <!-- External JS -->
