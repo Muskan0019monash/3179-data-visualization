@@ -2,55 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Migration to Australia — Prism Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Migration to Australia — Dashboard</title>
 
   <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Migration to Australia Dashboard</h1>
-    <p class="subtitle">Interactive Analysis of Global Migration Patterns</p>
+    <p class="subtitle">Interactive, filterable view of migrant origins and settlement (2023)</p>
   </header>
 
-  <section class="summary-cards">
+  <section class="top-row">
     <div class="card">
-      <h3>Total Countries</h3>
-      <p id="countryCount">—</p>
+      <div class="card-title">Total Countries</div>
+      <div id="countryCount" class="card-value">—</div>
     </div>
-    <div class="card">
-      <h3>Total Migrants</h3>
-      <p id="populationCount">—</p>
-    </div>
-  </section>
 
-  <section class="filter-section">
-    <label for="countrySelect">Select a Country:</label>
-    <select id="countrySelect">
-      <option value="All">All Countries</option>
-    </select>
+    <div class="card">
+      <div class="card-title">Total Migrants (sum)</div>
+      <div id="populationCount" class="card-value">—</div>
+    </div>
+
+    <div class="card filter-card">
+      <label for="countrySelect" class="card-title">Select Country</label>
+      <select id="countrySelect">
+        <option value="All">All Countries</option>
+      </select>
+    </div>
   </section>
 
   <main class="dashboard-grid">
-    <div class="chart-container full-width">
-      <h2>1️⃣ Migration Demographics</h2>
+    <section class="chart-panel">
+      <h2>1 — Migration Demographics (stacked by gender)</h2>
       <div id="demographicChart"></div>
-    </div>
+    </section>
 
-    <div class="chart-container full-width">
-      <h2>2️⃣ Migration Flow to Australian States</h2>
+    <section class="chart-panel">
+      <h2>2 — Migration Flow to Australian States</h2>
       <div id="flowChart"></div>
-    </div>
+
+      <div id="stateTableWrapper">
+        <h3>State breakdown (selected filter)</h3>
+        <table id="stateTable">
+          <thead><tr><th>State</th><th>Migrants</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p class="legend-note">Data visualized using Vega-Lite</p>
-    <p class="data-source">Source: migration.csv dataset</p>
+    <small>Data: <code>migration.csv</code> — Charts built with Vega-Lite. Serve files via an HTTP server to avoid CORS issues.</small>
   </footer>
 
   <script src="main.js"></script>
