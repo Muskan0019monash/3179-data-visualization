@@ -1,3 +1,4 @@
+<!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -442,7 +443,7 @@
                 "height": 350,
                 "layer": [
                     {
-                        // Base world map
+                        // Base world map with black borders for countries
                         "data": {
                             "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
                             "format": {
@@ -452,12 +453,12 @@
                         },
                         "mark": {
                             "type": "geoshape",
-                            "fill": "#e0e0e0",
-                            "stroke": "#fff",
-                            "strokeWidth": 0.5
+                            "fill": "#f2f2f2",
+                            "stroke": "#000",
+                            "strokeWidth": 0.6
                         },
                         "projection": {
-                            "type": "equirectangular"
+                            "type": "mercator"
                         }
                     },
                     {
@@ -468,8 +469,9 @@
                         "mark": {
                             "type": "circle",
                             "tooltip": true,
-                            "stroke": "#fff",
-                            "strokeWidth": 1
+                            "stroke": "#000",
+                            "strokeWidth": 0.8,
+                            "opacity": 0.85
                         },
                         "encoding": {
                             "longitude": {
@@ -483,24 +485,30 @@
                             "size": {
                                 "field": "Population",
                                 "type": "quantitative",
-                                "title": "Migrants to Australia",
+                                "title": "Migrants (size)",
                                 "scale": {
-                                    "range": [50, 2000]
+                                    // tightened range so small values remain visible
+                                    "range": [80, 2500]
                                 },
                                 "legend": {
-                                    "direction": "horizontal",
-                                    "gradientLength": 120,
-                                    "titleFontSize": 12,
-                                    "labelFontSize": 10
+                                    "title": "Migrants (size)",
+                                    "orient": "bottom",
+                                    "format": ","
                                 }
                             },
                             "color": {
                                 "field": "Population",
                                 "type": "quantitative",
+                                "title": "Migrants (colour)",
                                 "scale": {
-                                    "scheme": "purples"
+                                    // perceptually-uniform scheme for better legibility
+                                    "scheme": "viridis"
                                 },
-                                "legend": null
+                                "legend": {
+                                    "title": "Migrants",
+                                    "orient": "right",
+                                    "format": ","
+                                }
                             },
                             "tooltip": [
                                 {"field": "Country", "type": "nominal", "title": "Country"},
@@ -515,7 +523,7 @@
                 }
             };
 
-            // Chart 2: Migration to Australian States
+            // Chart 2: Migration to Australian States (improved palette)
             const stateSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
                 "description": "Migration flow to Australian states",
@@ -566,7 +574,7 @@
                 }
             };
 
-            // Chart 3: Demographic breakdown
+            // Chart 3: Demographic breakdown (improved palette and stacked view)
             const demographicSpec = {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
                 "description": "Migration by age and gender",
@@ -597,13 +605,8 @@
                         "type": "nominal",
                         "title": "Gender",
                         "scale": {
-                            "range": ["#4a235a", "#af7ac5"]
+                            "range": ["#6c3483", "#f39c9c"]
                         }
-                    },
-                    "column": {
-                        "field": "Gender",
-                        "type": "nominal",
-                        "title": "Gender"
                     },
                     "tooltip": [
                         {"field": "AgeGroup", "title": "Age Group"},
@@ -721,3 +724,4 @@
     </script>
 </body>
 </html>
+<!-- ...existing code... -->
