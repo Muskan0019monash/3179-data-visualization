@@ -1,58 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Migration to Australia — Prism Dashboard</title>
-
-  <!-- Vega / Vega-Lite / Vega-Embed -->
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Migration to Australia Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Migration to Australia Dashboard</h1>
-    <p class="subtitle">Interactive Analysis of Global Migration Patterns</p>
-  </header>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-globe-asia"></i> Global Migration to Australia Dashboard</h1>
+            <p class="subtitle">Interactive Analysis of Global Migration Patterns and Trends</p>
+        </div>
+    </header>
 
-  <section class="summary-cards">
-    <div class="card">
-      <h3>Total Countries</h3>
-      <p id="countryCount">—</p>
+    <div class="dashboard-container">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value" id="totalMigrants">-</div>
+                <div class="stat-label">Total Migrants</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="stat-value" id="sourceCountries">-</div>
+                <div class="stat-label">Source Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="stat-value" id="australianStates">-</div>
+                <div class="stat-label">Australian States</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value" id="growthRate">-</div>
+                <div class="stat-label">Growth Rate</div>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <div class="filter-group">
+                <label for="regionFilter"><i class="fas fa-globe"></i> Region</label>
+                <select id="regionFilter">
+                    <option value="All">All Regions</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="yearFilter"><i class="fas fa-calendar"></i> Year</label>
+                <select id="yearFilter">
+                    <option value="All">All Years</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="stateFilter"><i class="fas fa-map-marker-alt"></i> Australian State</label>
+                <select id="stateFilter">
+                    <option value="All">All States</option>
+                </select>
+            </div>
+            <button class="reset-btn" id="resetFilters"><i class="fas fa-redo"></i> Reset Filters</button>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-globe-americas"></i> World Migration Map</h2>
+                    </div>
+                    <div id="worldMap" class="chart-container"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-bar"></i> Migration by Australian State</h2>
+                    </div>
+                    <div id="stateChart" class="chart-container"></div>
+                </div>
+            </div>
+            
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-layer-group"></i> Visa & Citizenship Groups</h2>
+                    </div>
+                    <div id="visaChart" class="chart-container"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-exchange-alt"></i> Migrant Arrivals & Departures</h2>
+                    </div>
+                    <div id="arrivalDepartureChart" class="chart-container"></div>
+                </div>
+            </div>
+            
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-line"></i> Migration Trends Over Time</h2>
+                    </div>
+                    <div id="trendChart" class="chart-container"></div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-globe"></i> Migration by World Regions</h2>
+                    </div>
+                    <div id="regionChart" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card">
-      <h3>Total Migrants</h3>
-      <p id="populationCount">—</p>
-    </div>
-  </section>
 
-  <section class="filter-section">
-    <label for="countrySelect">Select a Country:</label>
-    <select id="countrySelect">
-      <option value="All">All Countries</option>
-    </select>
-  </section>
+    <footer>
+        <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
+    </footer>
 
-  <main class="dashboard-grid">
-    <div class="chart-container full-width">
-      <h2>1️⃣ Migration Demographics</h2>
-      <div id="demographicChart"></div>
-    </div>
-
-    <div class="chart-container full-width">
-      <h2>2️⃣ Migration Flow to Australian States</h2>
-      <div id="flowChart"></div>
-    </div>
-  </main>
-
-  <footer>
-    <p class="legend-note">Data visualized using Vega-Lite</p>
-    <p class="data-source">Source: migration.csv dataset</p>
-  </footer>
-
-  <script src="main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
