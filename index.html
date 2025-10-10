@@ -16,27 +16,42 @@
 <body>
   <header>
     <h1>Global Migration to Australia</h1>
-    <p class="subtitle">Interactive analysis of migrant origins, demographics and settlement patterns</p>
+    <p class="subtitle">Interactive analysis of migrant origins, demographics and settlement patterns (2023)</p>
   </header>
 
   <main>
+    <div class="top-cards">
+      <div class="stat-card">
+        <div class="stat-title">Total Countries</div>
+        <div id="stat-countries" class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Total Migrants (sum)</div>
+        <div id="stat-migrants" class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Most Common Settlement</div>
+        <div id="stat-state" class="stat-value">—</div>
+      </div>
+    </div>
+
     <div class="dashboard-grid">
       <div class="chart-container">
-        <h2>Geographic Distribution of Migrants</h2>
+        <h2>Geographic Distribution & Flows</h2>
         <div id="world-map">
           <div class="loading">Loading world map visualization...</div>
         </div>
       </div>
-      
+
       <div class="chart-container">
-        <h2>Migration by Region & Settlement State</h2>
+        <h2>Migration vs Gender Ratio (Interactive)</h2>
         <div id="scatter-plot">
           <div class="loading">Loading scatter plot visualization...</div>
         </div>
       </div>
-      
+
       <div class="chart-container full-width">
-        <h2>Demographics Overview</h2>
+        <h2>Demographics & Settlement</h2>
         <div id="demographics-chart">
           <div class="loading">Loading demographics visualization...</div>
         </div>
@@ -45,8 +60,8 @@
   </main>
 
   <footer>
-    <p class="legend-note">Circle size represents number of migrants • Hover for detailed information</p>
-    <p class="data-source">Data Source: Australian Bureau of Statistics & UN Migration Data (2023)</p>
+    <p class="legend-note">Circle size represents number of migrants • Hover any item for details • Click legend items to filter.</p>
+    <p class="data-source">Data Source: Provided CSV <code>migration.csv</code> (2023)</p>
   </footer>
 
   <!-- External JS -->
