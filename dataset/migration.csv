@@ -1,11 +1,26 @@
-country,lon,lat,migrants
-United Kingdom,-0.1276,51.5072,1000000
-China,116.4074,39.9042,650000
-India,77.2090,28.6139,600000
-New Zealand,174.7633,-36.8485,550000
-Vietnam,105.8544,21.0285,300000
-Italy,12.4964,41.9028,250000
-Philippines,121.7740,12.8797,200000
-South Africa,28.0473,-26.2041,180000
-Malaysia,101.6869,3.1390,170000
-Sri Lanka,80.7718,7.8731,150000
+country,lon,lat,migrants,year,region,age_group,gender_ratio,education_level,settlement_state
+United Kingdom,-0.1276,51.5072,1000000,2023,Europe,Mixed,0.52,High,NSW
+China,116.4074,39.9042,650000,2023,Asia,Young,0.48,High,VIC
+India,77.2090,28.6139,600000,2023,Asia,Young,0.45,Medium,NSW
+New Zealand,174.7633,-36.8485,550000,2023,Oceania,Mixed,0.51,High,QLD
+Vietnam,105.8544,21.0285,300000,2023,Asia,Middle,0.49,Medium,VIC
+Italy,12.4964,41.9028,250000,2023,Europe,Older,0.53,Medium,SA
+Philippines,121.7740,12.8797,200000,2023,Asia,Young,0.54,Medium,WA
+South Africa,28.0473,-26.2041,180000,2023,Africa,Mixed,0.47,High,NSW
+Malaysia,101.6869,3.1390,170000,2023,Asia,Young,0.50,High,VIC
+Sri Lanka,80.7718,7.8731,150000,2023,Asia,Middle,0.46,Medium,NSW
+Germany,10.4515,51.1657,140000,2023,Europe,Mixed,0.49,High,VIC
+Lebanon,35.8623,33.8547,130000,2023,Middle East,Mixed,0.48,Medium,NSW
+Greece,21.8243,39.0742,120000,2023,Europe,Older,0.52,Medium,VIC
+Thailand,100.9925,15.8700,110000,2023,Asia,Mixed,0.55,Medium,QLD
+Indonesia,-0.7893,113.9213,100000,2023,Asia,Young,0.51,Medium,WA
+South Korea,127.7669,35.9078,95000,2023,Asia,Young,0.47,High,NSW
+Japan,138.2529,36.2048,90000,2023,Asia,Mixed,0.49,High,VIC
+Nepal,85.3240,28.3949,85000,2023,Asia,Young,0.44,Low,QLD
+Bangladesh,90.3563,23.6850,80000,2023,Asia,Young,0.43,Low,NSW
+Pakistan,69.3451,30.3753,75000,2023,Asia,Young,0.42,Medium,VIC
+Iran,53.6880,32.4279,70000,2023,Middle East,Mixed,0.46,High,NSW
+Turkey,35.2433,38.9637,65000,2023,Europe,Mixed,0.48,Medium,VIC
+Afghanistan,67.7090,33.9391,60000,2023,Asia,Young,0.41,Low,NSW
+Myanmar,95.9560,21.9162,55000,2023,Asia,Mixed,0.52,Low,WA
+Brazil,-14.2350,-51.9253,50000,2023,South America,Young,0.51,Medium,QLD

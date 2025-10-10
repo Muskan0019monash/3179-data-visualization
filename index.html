@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migration to Australia — Interactive World Map</title>
+  <title>Migration to Australia — Interactive World Map & Analytics</title>
 
   <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -16,18 +16,37 @@
 <body>
   <header>
     <h1>Global Migration to Australia</h1>
-    <p class="subtitle">Interactive analysis of migrant origins and distribution</p>
+    <p class="subtitle">Interactive analysis of migrant origins, demographics and settlement patterns</p>
   </header>
 
   <main>
-    <div id="vis">
-      <div class="loading">Loading migration data visualization...</div>
+    <div class="dashboard-grid">
+      <div class="chart-container">
+        <h2>Geographic Distribution of Migrants</h2>
+        <div id="world-map">
+          <div class="loading">Loading world map visualization...</div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <h2>Migration by Region & Settlement State</h2>
+        <div id="scatter-plot">
+          <div class="loading">Loading scatter plot visualization...</div>
+        </div>
+      </div>
+      
+      <div class="chart-container full-width">
+        <h2>Demographics Overview</h2>
+        <div id="demographics-chart">
+          <div class="loading">Loading demographics visualization...</div>
+        </div>
+      </div>
     </div>
   </main>
 
   <footer>
-    <p class="legend-note">Circle size represents number of migrants • Hover for details</p>
-    <p class="data-source">Data Source: Australian Bureau of Statistics & UN Migration Data</p>
+    <p class="legend-note">Circle size represents number of migrants • Hover for detailed information</p>
+    <p class="data-source">Data Source: Australian Bureau of Statistics & UN Migration Data (2023)</p>
   </footer>
 
   <!-- External JS -->
