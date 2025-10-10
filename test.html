@@ -13,67 +13,63 @@
       margin: 40px;
       background: #fafafa;
     }
-    h1, h2 {
-      color: #222;
+    h1 {
       text-align: center;
     }
     .chart {
-      margin: 40px auto;
+      margin: 50px auto;
       max-width: 900px;
     }
   </style>
 </head>
 <body>
-  <h1>Migration to Australia — 2013–2024</h1>
+  <h1>Migration to Australia (2013–2024)</h1>
 
   <div class="chart" id="chart1"></div>
   <div class="chart" id="chart2"></div>
   <div class="chart" id="chart3"></div>
 
   <script>
-    // 1️⃣ Line Chart — Migrant Arrivals and Departures
+    // 1️⃣ Line Chart — Arrivals vs Departures
     const chart1 = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "description": "Migrant arrivals and departures over time.",
+      "title": "Migrant Arrivals and Departures (2013–2024)",
       "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Type == 'Arrivals' || datum.Type == 'Departures'"}],
+      "transform": [{"filter": "datum.Category == 'Arrivals' || datum.Category == 'Departures'"}],
       "mark": {"type": "line", "point": true},
       "encoding": {
-        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
-        "y": {"field": "Migrants", "type": "quantitative", "title": "Migrants (thousands)"},
-        "color": {"field": "Type", "type": "nominal", "title": "Category"},
-      },
-      "title": "Migrant Arrivals and Departures (2013–2024)"
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "Migrants", "type": "quantitative"},
+        "color": {"field": "Category", "type": "nominal"}
+      }
     };
 
     // 2️⃣ Stacked Bar Chart — Visa & Citizenship Groups
     const chart2 = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "description": "Overseas migrant arrivals by visa and citizenship group.",
+      "title": "Overseas Migrant Arrivals by Visa & Citizenship Group",
       "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Group != null"}],
+      "transform": [{"filter": "datum.Category == 'Visa'"}],
       "mark": "bar",
       "encoding": {
         "x": {"field": "Year", "type": "ordinal"},
-        "y": {"aggregate": "sum", "field": "Migrants", "title": "Migrants (thousands)"},
-        "color": {"field": "Group", "type": "nominal", "title": "Visa & Citizenship Group"}
-      },
-      "title": "Overseas Migrant Arrivals by Visa & Citizenship Group"
+        "y": {"aggregate": "sum", "field": "Migrants"},
+        "color": {"field": "Group", "type": "nominal", "title": "Group"}
+      }
     };
 
-    // 3️⃣ Grouped Bar Chart — Migrant Arrivals by Region
+    // 3️⃣ Grouped Bar Chart — Region of Birth
     const chart3 = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "description": "Migrant arrivals by region of birth (selected years).",
+      "title": "Migrant Arrivals by Region of Birth (Selected Years)",
       "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Region != null"}],
+      "transform": [{"filter": "datum.Category == 'Region'"}],
       "mark": "bar",
       "encoding": {
         "x": {"field": "Region", "type": "nominal", "axis": {"labelAngle": -25}},
-        "y": {"aggregate": "sum", "field": "Migrants", "title": "Migrants (thousands)"},
-        "color": {"field": "Year", "type": "ordinal", "title": "Year"},
-      },
-      "title": "Migrant Arrivals by Region of Birth (2013–2024)"
+        "y": {"aggregate": "sum", "field": "Migrants"},
+        "color": {"field": "Year", "type": "ordinal"}
+      }
     };
 
     vegaEmbed("#chart1", chart1);
