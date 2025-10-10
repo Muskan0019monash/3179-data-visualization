@@ -1,194 +1,148 @@
-/* Enhanced styling for multi-chart dashboard */
+/* ==========================================
+   Prism Migration Dashboard Stylesheet
+   File: style.css
+   Author: Muskan Gupta
+   ========================================== */
+
+/* ============================
+   Global Styles
+============================ */
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
   margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #eef6fb 0%, #d9e9f7 100%);
-  color: #2c3e50;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f9fbfd;
+  color: #222;
+  line-height: 1.6;
 }
 
-/* Header with gradient */
+/* ============================
+   Header
+============================ */
 header {
   text-align: center;
-  padding: 32px 16px;
-  background: linear-gradient(135deg, #003366 0%, #004b8d 100%);
+  background: linear-gradient(135deg, #005f99, #0099cc);
   color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 2rem 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-  font-size: 36px;
-  margin: 0 0 12px 0;
-  font-weight: 600;
-  letter-spacing: -0.5px;
+  margin: 0;
+  font-size: 2.2rem;
+  letter-spacing: 0.5px;
 }
 
 header .subtitle {
-  font-size: 18px;
-  opacity: 0.9;
-  margin: 0;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
   font-weight: 300;
-  max-width: 600px;
-  margin: 0 auto;
+  opacity: 0.9;
 }
 
-/* Main content area */
-main {
-  flex: 1;
-  padding: 32px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Dashboard grid layout */
+/* ============================
+   Dashboard Layout Grid
+============================ */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
+/* ============================
+   Chart Containers
+============================ */
 .chart-container {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
-  overflow: hidden;
-  border: 1px solid #e1e8ed;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
 }
 
 .chart-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}
+
+.chart-container h2 {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #004a70;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e3eef5;
+  padding-bottom: 0.5rem;
 }
 
 .chart-container.full-width {
   grid-column: 1 / -1;
 }
 
-.chart-container h2 {
-  margin: 0;
-  padding: 20px 24px 16px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #2c3e50;
-  border-bottom: 2px solid #f8f9fa;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+/* ============================
+   Vega Charts Embedding
+============================ */
+.vega-embed {
+  width: 100% !important;
+  height: auto !important;
+  overflow: hidden;
 }
 
-/* Visualization containers */
-#world-map, #scatter-plot, #demographics-chart {
-  padding: 16px;
-  min-height: 400px;
+/* ============================
+   Loading Text
+============================ */
+.loading {
+  text-align: center;
+  color: #999;
+  font-size: 0.95rem;
+  padding: 2rem;
 }
 
-#world-map {
-  min-height: 500px;
-}
-
-/* Footer */
+/* ============================
+   Footer
+============================ */
 footer {
   text-align: center;
-  padding: 24px 16px;
-  background: #f8f9fa;
-  border-top: 1px solid #dee2e6;
-  font-size: 14px;
-  color: #6c757d;
+  padding: 1rem;
+  background-color: #f0f5f9;
+  border-top: 1px solid #dfe8f0;
+  font-size: 0.9rem;
+  color: #444;
 }
 
 footer .legend-note {
-  margin: 6px 0;
+  margin-bottom: 0.4rem;
   font-style: italic;
-  font-weight: 500;
+  color: #555;
 }
 
 footer .data-source {
-  margin: 6px 0;
-  font-size: 13px;
-  opacity: 0.8;
+  color: #777;
 }
 
-/* Loading state */
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  font-size: 18px;
-  color: #666;
-  background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-  background-size: 20px 20px;
-  animation: loading-shimmer 2s infinite;
+/* ============================
+   Interactive Effects
+============================ */
+.chart-container:hover h2 {
+  color: #007bb8;
+  transition: color 0.3s ease;
 }
 
-@keyframes loading-shimmer {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 40px; }
-}
-
-/* Responsive design */
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  header h1 {
-    font-size: 28px;
-  }
-  
-  header .subtitle {
-    font-size: 16px;
-  }
-}
-
+/* ============================
+   Responsive Adjustments
+============================ */
 @media (max-width: 768px) {
-  header {
-    padding: 24px 16px;
-  }
-  
   header h1 {
-    font-size: 24px;
+    font-size: 1.8rem;
   }
-  
-  main {
-    padding: 20px 16px;
+
+  header .subtitle {
+    font-size: 1rem;
   }
-  
-  .chart-container {
-    border-radius: 12px;
-  }
-  
+
   .chart-container h2 {
-    font-size: 18px;
-    padding: 16px 20px 12px;
+    font-size: 1.1rem;
   }
-  
-  #world-map, #scatter-plot, #demographics-chart {
-    padding: 12px;
-    min-height: 300px;
+
+  .dashboard-grid {
+    padding: 1.2rem;
   }
-}
-
-/* Custom scrollbar for better aesthetics */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
 }
