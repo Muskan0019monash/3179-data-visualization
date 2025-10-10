@@ -15,7 +15,7 @@ OUTPUT_FILE = DATA_DIR / "migration.csv"
 
 # --- STEP 1: Load datasets ---
 print("Loading datasets...")
-undesa = pd.read_csv(UNDESA_FILE)
+undesa = pd.read_csv(UNDESA_FILE, encoding='latin1')
 inflow = pd.read_excel(INFLOW_FILE)
 
 # --- STEP 2: Standardize column names ---
