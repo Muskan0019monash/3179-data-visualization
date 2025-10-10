@@ -2,69 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migration to Australia — Interactive World Map & Analytics</title>
+  <title>Migration to Australia — Prism Dashboard</title>
 
   <!-- Vega / Vega-Lite / Vega-Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- External CSS -->
-  <link rel="stylesheet" href="CSS/style.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Global Migration to Australia</h1>
-    <p class="subtitle">Interactive analysis of migrant origins, demographics and settlement patterns (2023)</p>
+    <h1>Migration to Australia Dashboard</h1>
+    <p class="subtitle">Interactive Analysis of Global Migration Patterns</p>
   </header>
 
-  <main>
-    <div class="top-cards">
-      <div class="stat-card">
-        <div class="stat-title">Total Countries</div>
-        <div id="stat-countries" class="stat-value">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Total Migrants (sum)</div>
-        <div id="stat-migrants" class="stat-value">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-title">Most Common Settlement</div>
-        <div id="stat-state" class="stat-value">—</div>
-      </div>
+  <section class="summary-cards">
+    <div class="card">
+      <h3>Total Countries</h3>
+      <p id="countryCount">—</p>
+    </div>
+    <div class="card">
+      <h3>Total Migrants</h3>
+      <p id="populationCount">—</p>
+    </div>
+  </section>
+
+  <section class="filter-section">
+    <label for="countrySelect">Select a Country:</label>
+    <select id="countrySelect">
+      <option value="All">All Countries</option>
+    </select>
+  </section>
+
+  <main class="dashboard-grid">
+    <div class="chart-container full-width">
+      <h2>1️⃣ Migration Demographics</h2>
+      <div id="demographicChart"></div>
     </div>
 
-    <div class="dashboard-grid">
-      <div class="chart-container">
-        <h2>Geographic Distribution & Flows</h2>
-        <div id="world-map">
-          <div class="loading">Loading world map visualization...</div>
-        </div>
-      </div>
-
-      <div class="chart-container">
-        <h2>Migration vs Gender Ratio (Interactive)</h2>
-        <div id="scatter-plot">
-          <div class="loading">Loading scatter plot visualization...</div>
-        </div>
-      </div>
-
-      <div class="chart-container full-width">
-        <h2>Demographics & Settlement</h2>
-        <div id="demographics-chart">
-          <div class="loading">Loading demographics visualization...</div>
-        </div>
-      </div>
+    <div class="chart-container full-width">
+      <h2>2️⃣ Migration Flow to Australian States</h2>
+      <div id="flowChart"></div>
     </div>
   </main>
 
   <footer>
-    <p class="legend-note">Circle size represents number of migrants • Hover any item for details • Click legend items to filter.</p>
-    <p class="data-source">Data Source: Provided CSV <code>migration.csv</code> (2023)</p>
+    <p class="legend-note">Data visualized using Vega-Lite</p>
+    <p class="data-source">Source: migration.csv dataset</p>
   </footer>
 
-  <!-- External JS -->
-  <script src="javascript/main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
