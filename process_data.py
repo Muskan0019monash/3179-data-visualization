@@ -15,8 +15,26 @@ OUTPUT_FILE = DATA_DIR / "migration.csv"
 
 # --- STEP 1: Load datasets ---
 print("Loading datasets...")
-undesa = pd.read_csv(UNDESA_FILE, encoding='ISO-8859-1')
+
+# Robust CSV reader (auto-encoding and delimiter handling)
+def safe_read_csv(file_path):
+    try:
+        # Try default first
+        return pd.read_csv(file_path)
+    except pd.errors.ParserError:
+        print(f"⚠️ Parsing issue with {file_path.name}, retrying with ';' as delimiter...")
+        return pd.read_csv(file_path, sep=';', engine='python')
+    except UnicodeDecodeError:
+        print(f"⚠️ Encoding issue with {file_path.name}, retrying with ISO-8859-1...")
+        return pd.read_csv(file_path, encoding='ISO-8859-1')
+    except Exception as e:
+        raise RuntimeError(f"❌ Failed to load {file_path.name}: {e}")
+
+undesa = safe_read_csv(UNDESA_FILE)
 inflow = pd.read_excel(INFLOW_FILE)
+
+print(f"✅ Loaded UNDESA dataset: {undesa.shape} rows, {undesa.columns.tolist()}")
+print(f"✅ Loaded Inflow dataset: {inflow.shape} rows, {inflow.columns.tolist()}")
 
 # --- STEP 2: Standardize column names ---
 undesa.columns = undesa.columns.str.strip().str.lower()
@@ -33,6 +51,9 @@ aus_undesa = filter_to_australia(undesa)
 aus_inflow = filter_to_australia(inflow)
 combined = pd.concat([aus_undesa, aus_inflow], ignore_index=True)
 
+if combined.empty:
+    raise ValueError("❌ No rows found for destination = Australia. Check your dataset column names.")
+
 # --- STEP 4: Identify source/origin and migrant count columns ---
 def find_col(df, keywords):
     for key in keywords:
@@ -41,11 +62,11 @@ def find_col(df, keywords):
                 return col
     return None
 
-country_col = find_col(combined, ["origin", "from", "source", "country of origin"])
-migrant_col = find_col(combined, ["migrants", "value", "total", "flow", "number"])
+country_col = find_col(combined, ["origin", "from", "source", "country of origin", "country"])
+migrant_col = find_col(combined, ["migrants", "value", "total", "flow", "number", "count"])
 
 if not country_col or not migrant_col:
-    raise ValueError("Could not find suitable columns for country or migrant count.")
+    raise ValueError(f"❌ Could not find suitable columns.\nAvailable columns: {combined.columns.tolist()}")
 
 clean_df = combined[[country_col, migrant_col]].rename(columns={
     country_col: "country",
