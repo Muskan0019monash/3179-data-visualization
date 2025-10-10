@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration to Australia Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .summary-cards {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .card p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a73e8;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-section label {
+            font-weight: 600;
+            margin-right: 1rem;
+            color: #555;
+        }
+
+        #countrySelect {
+            padding: 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 300px;
+            max-width: 100%;
+            background-color: #f9f9f9;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .chart-box {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-box h2 {
+            color: #1a73e8;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+            background-color: #f0f4f8;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 992px) {
+            .charts-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Migration to Australia Dashboard</h1>
+        <p class="subtitle">Interactive Analysis of Global Migration Patterns</p>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="summary-cards">
+            <div class="card">
+                <h3>Total Countries</h3>
+                <p id="countryCount">-</p>
+            </div>
+            <div class="card">
+                <h3>Total Migrants</h3>
+                <p id="populationCount">-</p>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <label for="countrySelect">Select a Country:</label>
+            <select id="countrySelect">
+                <option value="All">All Countries</option>
+            </select>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-box">
+                <h2>Migration Demographics</h2>
+                <div id="demographicChart" class="chart-container"></div>
+            </div>
+            <div class="chart-box">
+                <h2>Migration Flow to Australian States</h2>
+                <div id="flowChart" class="chart-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
+    </footer>
+
+    <script>
+        // Sample data - in a real scenario, this would come from migration.csv
+        const migrationData = [
+            { Country: "India", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 15000 },
+            { Country: "India", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 12000 },
+            { Country: "India", AgeGroup: "30-39", Gender: "Male", State: "New South Wales", Population: 11000 },
+            { Country: "India", AgeGroup: "30-39", Gender: "Female", State: "New South Wales", Population: 9000 },
+            { Country: "China", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 13000 },
+            { Country: "China", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 11000 },
+            { Country: "China", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 8000 },
+            { Country: "China", AgeGroup: "30-39", Gender: "Female", State: "Queensland", Population: 7000 },
+            { Country: "United Kingdom", AgeGroup: "40-49", Gender: "Male", State: "Western Australia", Population: 6000 },
+            { Country: "United Kingdom", AgeGroup: "40-49", Gender: "Female", State: "Western Australia", Population: 5500 },
+            { Country: "United Kingdom", AgeGroup: "50-59", Gender: "Male", State: "South Australia", Population: 4000 },
+            { Country: "United Kingdom", AgeGroup: "50-59", Gender: "Female", State: "South Australia", Population: 3500 },
+            { Country: "Philippines", AgeGroup: "20-29", Gender: "Female", State: "New South Wales", Population: 9000 },
+            { Country: "Philippines", AgeGroup: "30-39", Gender: "Female", State: "Victoria", Population: 7000 },
+            { Country: "Philippines", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 5000 },
+            { Country: "New Zealand", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 6000 },
+            { Country: "New Zealand", AgeGroup: "20-29", Gender: "Female", State: "New South Wales", Population: 5500 },
+            { Country: "New Zealand", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 4500 }
+        ];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate summary cards
+            const uniqueCountries = [...new Set(migrationData.map(d => d.Country))];
+            const totalPopulation = migrationData.reduce((sum, d) => sum + d.Population, 0);
+            
+            document.getElementById('countryCount').textContent = uniqueCountries.length;
+            document.getElementById('populationCount').textContent = totalPopulation.toLocaleString();
+
+            // Populate country dropdown
+            const countrySelect = document.getElementById('countrySelect');
+            uniqueCountries.sort().forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                countrySelect.appendChild(option);
+            });
+
+            // Render initial charts
+            renderCharts('All');
+
+            // Add event listener for dropdown changes
+            countrySelect.addEventListener('change', function() {
+                renderCharts(this.value);
+            });
+        });
+
+        function renderCharts(selectedCountry) {
+            // Filter data based on selection
+            const filteredData = selectedCountry === 'All' 
+                ? migrationData 
+                : migrationData.filter(d => d.Country === selectedCountry);
+
+            // Chart 1: Migration Demographics
+            const demographicSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "description": "Migration demographics by age group and gender",
+                "width": "container",
+                "height": 350,
+                "data": {
+                    "values": filteredData
+                },
+                "mark": "bar",
+                "encoding": {
+                    "x": {
+                        "field": "AgeGroup",
+                        "type": "nominal",
+                        "title": "Age Group",
+                        "axis": {"labelAngle": 0}
+                    },
+                    "y": {
+                        "aggregate": "sum",
+                        "field": "Population",
+                        "type": "quantitative",
+                        "title": "Number of Migrants"
+                    },
+                    "color": {
+                        "field": "Gender",
+                        "type": "nominal",
+                        "title": "Gender",
+                        "scale": {
+                            "range": ["#1a73e8", "#ea4335"]
+                        }
+                    },
+                    "tooltip": [
+                        {"field": "AgeGroup", "title": "Age Group"},
+                        {"field": "Gender", "title": "Gender"},
+                        {"aggregate": "sum", "field": "Population", "title": "Migrants"}
+                    ]
+                },
+                "config": {
+                    "view": {"stroke": "transparent"},
+                    "axis": {"grid": false}
+                }
+            };
+
+            // Chart 2: Migration Flow to Australian States
+            const flowSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "description": "Migration flow to Australian states",
+                "width": "container",
+                "height": 350,
+                "data": {
+                    "values": filteredData
+                },
+                "mark": {
+                    "type": "bar",
+                    "cornerRadius": 4
+                },
+                "encoding": {
+                    "x": {
+                        "field": "State",
+                        "type": "nominal",
+                        "title": "Australian State",
+                        "axis": {"labelAngle": 0}
+                    },
+                    "y": {
+                        "aggregate": "sum",
+                        "field": "Population",
+                        "type": "quantitative",
+                        "title": "Number of Migrants"
+                    },
+                    "color": {
+                        "field": "State",
+                        "type": "nominal",
+                        "title": "State",
+                        "scale": {
+                            "range": ["#1a73e8", "#34a853", "#fbbc05", "#ea4335", "#9334e6", "#00acc1"]
+                        }
+                    },
+                    "tooltip": [
+                        {"field": "State", "title": "State"},
+                        {"aggregate": "sum", "field": "Population", "title": "Migrants"}
+                    ]
+                },
+                "config": {
+                    "view": {"stroke": "transparent"},
+                    "axis": {"grid": false}
+                }
+            };
+
+            // Embed charts
+            vegaEmbed('#demographicChart', demographicSpec, {actions: false});
+            vegaEmbed('#flowChart', flowSpec, {actions: false});
+        }
+    </script>
+</body>
+</html>
