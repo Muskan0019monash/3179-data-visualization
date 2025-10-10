@@ -223,216 +223,141 @@
     </footer>
 
     <script>
-        // Sample data - in a real scenario, this would come from migration.csv
-        const migrationData = [
-            { Country: "India", CountryCode: "IND", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 15000 },
-            { Country: "India", CountryCode: "IND", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 12000 },
-            { Country: "India", CountryCode: "IND", AgeGroup: "30-39", Gender: "Male", State: "New South Wales", Population: 11000 },
-            { Country: "India", CountryCode: "IND", AgeGroup: "30-39", Gender: "Female", State: "New South Wales", Population: 9000 },
-            { Country: "China", CountryCode: "CHN", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 13000 },
-            { Country: "China", CountryCode: "CHN", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 11000 },
-            { Country: "China", CountryCode: "CHN", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 8000 },
-            { Country: "China", CountryCode: "CHN", AgeGroup: "30-39", Gender: "Female", State: "Queensland", Population: 7000 },
-            { Country: "United Kingdom", CountryCode: "GBR", AgeGroup: "40-49", Gender: "Male", State: "Western Australia", Population: 6000 },
-            { Country: "United Kingdom", CountryCode: "GBR", AgeGroup: "40-49", Gender: "Female", State: "Western Australia", Population: 5500 },
-            { Country: "United Kingdom", CountryCode: "GBR", AgeGroup: "50-59", Gender: "Male", State: "South Australia", Population: 4000 },
-            { Country: "United Kingdom", CountryCode: "GBR", AgeGroup: "50-59", Gender: "Female", State: "South Australia", Population: 3500 },
-            { Country: "Philippines", CountryCode: "PHL", AgeGroup: "20-29", Gender: "Female", State: "New South Wales", Population: 9000 },
-            { Country: "Philippines", CountryCode: "PHL", AgeGroup: "30-39", Gender: "Female", State: "Victoria", Population: 7000 },
-            { Country: "Philippines", CountryCode: "PHL", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 5000 },
-            { Country: "New Zealand", CountryCode: "NZL", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 6000 },
-            { Country: "New Zealand", CountryCode: "NZL", AgeGroup: "20-29", Gender: "Female", State: "New South Wales", Population: 5500 },
-            { Country: "New Zealand", CountryCode: "NZL", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 4500 },
-            { Country: "United States", CountryCode: "USA", AgeGroup: "20-29", Gender: "Male", State: "New South Wales", Population: 4000 },
-            { Country: "United States", CountryCode: "USA", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 3500 },
-            { Country: "United States", CountryCode: "USA", AgeGroup: "30-39", Gender: "Male", State: "Queensland", Population: 3000 },
-            { Country: "South Africa", CountryCode: "ZAF", AgeGroup: "30-39", Gender: "Male", State: "Western Australia", Population: 3500 },
-            { Country: "South Africa", CountryCode: "ZAF", AgeGroup: "30-39", Gender: "Female", State: "Victoria", Population: 3000 },
-            { Country: "Malaysia", CountryCode: "MYS", AgeGroup: "20-29", Gender: "Female", State: "Victoria", Population: 4000 },
-            { Country: "Malaysia", CountryCode: "MYS", AgeGroup: "20-29", Gender: "Male", State: "New South Wales", Population: 3500 }
-        ];
+    // Sample migration dataset (you can replace it later with migration.csv)
+    const migrationData = [
+        { Country: "India", CountryCode: "IND", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 15000 },
+        { Country: "India", CountryCode: "IND", AgeGroup: "30-39", Gender: "Female", State: "New South Wales", Population: 9000 },
+        { Country: "China", CountryCode: "CHN", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 13000 },
+        { Country: "China", CountryCode: "CHN", AgeGroup: "30-39", Gender: "Female", State: "Queensland", Population: 7000 },
+        { Country: "United Kingdom", CountryCode: "GBR", AgeGroup: "40-49", Gender: "Male", State: "Western Australia", Population: 6000 },
+        { Country: "Philippines", CountryCode: "PHL", AgeGroup: "30-39", Gender: "Female", State: "Victoria", Population: 7000 },
+        { Country: "New Zealand", CountryCode: "NZL", AgeGroup: "20-29", Gender: "Female", State: "New South Wales", Population: 5500 },
+        { Country: "United States", CountryCode: "USA", AgeGroup: "20-29", Gender: "Male", State: "Victoria", Population: 4000 },
+        { Country: "South Africa", CountryCode: "ZAF", AgeGroup: "30-39", Gender: "Female", State: "Victoria", Population: 3000 },
+        { Country: "Malaysia", CountryCode: "MYS", AgeGroup: "20-29", Gender: "Male", State: "New South Wales", Population: 3500 }
+    ];
 
-        // Initialize dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            // Calculate summary statistics
-            const uniqueCountries = [...new Set(migrationData.map(d => d.Country))];
-            const totalPopulation = migrationData.reduce((sum, d) => sum + d.Population, 0);
-            
-            // Find top country
-            const countryPopulations = {};
-            migrationData.forEach(d => {
-                countryPopulations[d.Country] = (countryPopulations[d.Country] || 0) + d.Population;
-            });
-            const topCountry = Object.keys(countryPopulations).reduce((a, b) => 
-                countryPopulations[a] > countryPopulations[b] ? a : b
-            );
-            
-            // Find top state
-            const statePopulations = {};
-            migrationData.forEach(d => {
-                statePopulations[d.State] = (statePopulations[d.State] || 0) + d.Population;
-            });
-            const topState = Object.keys(statePopulations).reduce((a, b) => 
-                statePopulations[a] > statePopulations[b] ? a : b
-            );
-            
-            // Update fact cards
-            document.getElementById('countryCount').textContent = uniqueCountries.length;
-            document.getElementById('populationCount').textContent = totalPopulation.toLocaleString();
-            document.getElementById('topCountry').textContent = topCountry;
-            document.getElementById('topState').textContent = topState;
+    document.addEventListener('DOMContentLoaded', function() {
+        renderCharts();
+    });
 
-            // Populate country dropdown
-            const countrySelect = document.getElementById('countrySelect');
-            uniqueCountries.sort().forEach(country => {
-                const option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                countrySelect.appendChild(option);
-            });
-
-            // Render initial charts
-            renderCharts('All');
-
-            // Add event listener for dropdown changes
-            countrySelect.addEventListener('change', function() {
-                renderCharts(this.value);
-            });
+    function renderCharts() {
+        // --- Aggregate data for the map ---
+        const countryAgg = {};
+        migrationData.forEach(d => {
+            if (!countryAgg[d.Country]) {
+                countryAgg[d.Country] = 0;
+            }
+            countryAgg[d.Country] += d.Population;
         });
 
-        function renderCharts(selectedCountry) {
-            // Filter data based on selection
-            const filteredData = selectedCountry === 'All' 
-                ? migrationData 
-                : migrationData.filter(d => d.Country === selectedCountry);
+        const mapData = Object.entries(countryAgg).map(([country, pop]) => ({
+            Country: country,
+            Population: pop
+        }));
 
-            // Prepare data for world map
-            const countryData = {};
-            filteredData.forEach(d => {
-                if (!countryData[d.CountryCode]) {
-                    countryData[d.CountryCode] = {
-                        Country: d.Country,
-                        CountryCode: d.CountryCode,
-                        Population: 0
-                    };
-                }
-                countryData[d.CountryCode].Population += d.Population;
-            });
-            
-            const mapData = Object.values(countryData);
-            
-            // Chart 1: World Map
-            const mapSpec = {
-                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-                "description": "World map showing migration to Australia",
-                "width": "container",
-                "height": 350,
-                "data": {
-                    "values": mapData,
-                    "format": {
-                        "type": "topojson",
-                        "feature": "countries"
-                    }
+        // --- World Map Visualization ---
+        const mapSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "width": "container",
+            "height": 400,
+            "projection": {"type": "equalEarth"},
+            "layer": [
+                {
+                    // Base map
+                    "data": {
+                        "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
+                        "format": {"type": "topojson", "feature": "countries"}
+                    },
+                    "mark": {"type": "geoshape", "fill": "#e0e0e0", "stroke": "#fff"}
                 },
-                "transform": [
-                    {
-                        "lookup": "id",
-                        "from": {
-                            "data": {
-                                "url": "https://vega.github.io/vega-datasets/data/world-110m.json",
-                                "format": {
-                                    "type": "topojson",
-                                    "feature": "countries"
-                                }
-                            },
-                            "key": "id"
-                        },
-                        "as": "geo"
-                    }
-                ],
-                "projection": {
-                    "type": "equirectangular"
-                },
-                "mark": {
-                    "type": "geoshape",
-                    "stroke": "#fff",
-                    "strokeWidth": 0.5
-                },
-                "encoding": {
-                    "color": {
-                        "field": "Population",
-                        "type": "quantitative",
-                        "title": "Migrants to Australia",
-                        "scale": {
-                            "scheme": "blues"
-                        },
-                        "legend": {
-                            "direction": "horizontal",
-                            "gradientLength": 120
+                {
+                    // Overlay country points
+                    "data": {"values": mapData},
+                    "transform": [
+                        {
+                            "lookup": "Country",
+                            "from": {
+                                "data": {
+                                    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/countries.json"
+                                },
+                                "key": "name",
+                                "fields": ["latitude", "longitude"]
+                            }
                         }
-                    },
-                    "tooltip": [
-                        {"field": "Country", "type": "nominal", "title": "Country"},
-                        {"field": "Population", "type": "quantitative", "title": "Migrants", "format": ","}
-                    ]
-                },
-                "config": {
-                    "view": {"stroke": "transparent"},
-                    "background": "transparent"
-                }
-            };
-
-            // Chart 2: Migration to Australian States
-            const stateSpec = {
-                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-                "description": "Migration flow to Australian states",
-                "width": "container",
-                "height": 350,
-                "data": {
-                    "values": filteredData
-                },
-                "mark": {
-                    "type": "bar",
-                    "cornerRadius": 4
-                },
-                "encoding": {
-                    "x": {
-                        "field": "State",
-                        "type": "nominal",
-                        "title": "Australian State",
-                        "axis": {"labelAngle": 0},
-                        "sort": "-y"
-                    },
-                    "y": {
-                        "aggregate": "sum",
-                        "field": "Population",
-                        "type": "quantitative",
-                        "title": "Number of Migrants"
-                    },
-                    "color": {
-                        "field": "State",
-                        "type": "nominal",
-                        "title": "State",
-                        "scale": {
-                            "range": ["#3949ab", "#1e88e5", "#039be5", "#00acc1", "#00897b", "#43a047"]
+                    ],
+                    "mark": {"type": "circle", "tooltip": true},
+                    "encoding": {
+                        "longitude": {"field": "longitude", "type": "quantitative"},
+                        "latitude": {"field": "latitude", "type": "quantitative"},
+                        "size": {
+                            "field": "Population",
+                            "type": "quantitative",
+                            "title": "Migrants",
+                            "scale": {"range": [100, 2000]}
                         },
-                        "legend": null
-                    },
-                    "tooltip": [
-                        {"field": "State", "title": "State"},
-                        {"aggregate": "sum", "field": "Population", "title": "Migrants", "format": ","}
-                    ]
-                },
-                "config": {
-                    "view": {"stroke": "transparent"},
-                    "axis": {"grid": false}
+                        "color": {
+                            "field": "Population",
+                            "type": "quantitative",
+                            "scale": {"scheme": "blues"},
+                            "legend": {"title": "Migrants to Australia"}
+                        },
+                        "tooltip": [
+                            {"field": "Country", "title": "Country"},
+                            {"field": "Population", "title": "Migrants", "format": ","}
+                        ]
+                    }
                 }
-            };
+            ],
+            "config": {
+                "view": {"stroke": "transparent"},
+                "background": "transparent"
+            }
+        };
 
-            // Embed charts
-            vegaEmbed('#worldMap', mapSpec, {actions: false}).catch(console.error);
-            vegaEmbed('#stateChart', stateSpec, {actions: false});
-        }
+        // --- Migration to Australian States Visualization ---
+        const stateSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Migration flow to Australian states",
+            "width": "container",
+            "height": 400,
+            "data": {"values": migrationData},
+            "mark": {"type": "bar", "cornerRadius": 4},
+            "encoding": {
+                "x": {
+                    "field": "State",
+                    "type": "nominal",
+                    "title": "Australian State",
+                    "axis": {"labelAngle": 0},
+                    "sort": "-y"
+                },
+                "y": {
+                    "aggregate": "sum",
+                    "field": "Population",
+                    "type": "quantitative",
+                    "title": "Number of Migrants"
+                },
+                "color": {
+                    "field": "State",
+                    "type": "nominal",
+                    "legend": {"title": "State"}
+                },
+                "tooltip": [
+                    {"field": "State", "title": "State"},
+                    {"aggregate": "sum", "field": "Population", "title": "Migrants", "format": ","}
+                ]
+            },
+            "config": {"view": {"stroke": "transparent"}}
+        };
+
+        // --- Embed both charts ---
+        vegaEmbed('#worldMap', mapSpec, {actions: false}).catch(error => {
+            console.error("Map embedding failed:", error);
+        });
+
+        vegaEmbed('#stateChart', stateSpec, {actions: false});
+    }
     </script>
+
 </body>
 </html>
