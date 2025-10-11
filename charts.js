@@ -1,70 +1,190 @@
-// ==============================
-// Vega-Lite Charts for Migration Dashboard
-// ==============================
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    renderCharts();
+});
 
-// This function runs once data is loaded in data.js
-function createCharts(data) {
-
-    // ---------- 1. World Map: Regional Migration -------------
-    const regionData = data.filter(d => d.Category === "Region");
-
-    const worldMapSpec = {
-        $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-        width: "container",
-        height: 400,
-        projection: { type: "equalEarth" },
-        layer: [
+function renderCharts() {
+    // Chart 1: World Map with Points
+    const mapSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "World map showing migration to Australia",
+        "width": "container",
+        "height": 400,
+        "layer": [
             {
-                data: {
-                    url: "https://raw.githubusercontent.com/vega/vega-datasets/master/data/world-110m.json",
-                    format: { type: "topojson", feature: "countries" }
+                // Base world map with black borders
+                "data": {
+                    "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
+                    "format": {
+                        "type": "topojson",
+                        "feature": "countries"
+                    }
                 },
-                mark: { type: "geoshape", fill: "#e0e0e0", stroke: "white" }
+                "mark": {
+                    "type": "geoshape",
+                    "fill": "#f0f0f0",
+                    "stroke": "#000",
+                    "strokeWidth": 0.3
+                },
+                "projection": {
+                    "type": "equirectangular"
+                }
             },
             {
-                data: { values: regionData },
-                transform: [
-                    { filter: "datum['Year'] == '2023-24'" }
-                ],
-                mark: "circle",
-                encoding: {
-                    longitude: { field: "lon", type: "quantitative" },
-                    latitude: { field: "lat", type: "quantitative" },
-                    size: { field: "Migrants", type: "quantitative", scale: { range: [100, 2000] } },
-                    color: { field: "Region", type: "nominal", legend: { title: "Region" } },
-                    tooltip: [
-                        { field: "Region", title: "Region" },
-                        { field: "Migrants", title: "Migrants (thousands)" }
+                // Migration data points
+                "data": {
+                    "values": migrationData
+                },
+                "mark": {
+                    "type": "circle",
+                    "tooltip": true,
+                    "stroke": "#000",
+                    "strokeWidth": 1
+                },
+                "encoding": {
+                    "longitude": {
+                        "field": "lon",
+                        "type": "quantitative"
+                    },
+                    "latitude": {
+                        "field": "lat",
+                        "type": "quantitative"
+                    },
+                    "size": {
+                        "field": "migrants",
+                        "type": "quantitative",
+                        "title": "Migrants to Australia",
+                        "scale": {
+                            "range": [50, 2000]
+                        },
+                        "legend": {
+                            "direction": "horizontal",
+                            "gradientLength": 120,
+                            "titleFontSize": 12,
+                            "labelFontSize": 10,
+                            "orient": "bottom"
+                        }
+                    },
+                    "color": {
+                        "field": "migrants",
+                        "type": "quantitative",
+                        "title": "Number of Migrants",
+                        "scale": {
+                            "scheme": "viridis"
+                        },
+                        "legend": {
+                            "direction": "vertical",
+                            "gradientLength": 150,
+                            "titleFontSize": 12,
+                            "labelFontSize": 10,
+                            "orient": "right"
+                        }
+                    },
+                    "tooltip": [
+                        {"field": "country", "type": "nominal", "title": "Country"},
+                        {"field": "migrants", "type": "quantitative", "title": "Migrants", "format": ","},
+                        {"field": "region", "type": "nominal", "title": "Region"},
+                        {"field": "education_level", "type": "nominal", "title": "Education Level"}
                     ]
                 }
             }
         ],
-        title: "Global Migration to Australia by Region (2023–24)"
+        "config": {
+            "view": {"stroke": "transparent"},
+            "background": "transparent"
+        }
     };
 
-    // ---------- 2. Bar Chart: Visa Categories Over Time ----------
-    const visaData = data.filter(d => d.Category === "Visa");
-
-    const visaChartSpec = {
-        $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-        width: "container",
-        height: 400,
-        data: { values: visaData },
-        mark: "bar",
-        encoding: {
-            x: { field: "Year", type: "ordinal", title: "Year" },
-            y: { field: "Migrants", type: "quantitative", title: "Migrants (thousands)" },
-            color: { field: "Group", type: "nominal", title: "Visa Category" },
-            tooltip: [
-                { field: "Year", title: "Year" },
-                { field: "Group", title: "Visa Category" },
-                { field: "Migrants", title: "Migrants (thousands)" }
+    // Chart 2: Migration to Australian States with consistent colors
+    const stateSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "Migration flow to Australian states",
+        "width": "container",
+        "height": 400,
+        "data": {
+            "values": migrationData
+        },
+        "mark": {
+            "type": "bar",
+            "cornerRadius": 4
+        },
+        "encoding": {
+            "x": {
+                "field": "settlement_state",
+                "type": "nominal",
+                "title": "Australian State",
+                "axis": {"labelAngle": 0},
+                "sort": "-y"
+            },
+            "y": {
+                "aggregate": "sum",
+                "field": "migrants",
+                "type": "quantitative",
+                "title": "Number of Migrants"
+            },
+            "color": {
+                "field": "settlement_state",
+                "type": "nominal",
+                "title": "State",
+                "scale": {
+                    "domain": Object.keys(stateColors),
+                    "range": Object.values(stateColors)
+                },
+                "legend": {
+                    "orient": "bottom",
+                    "titleFontSize": 12,
+                    "labelFontSize": 10
+                }
+            },
+            "tooltip": [
+                {"field": "settlement_state", "title": "State"},
+                {"aggregate": "sum", "field": "migrants", "title": "Migrants", "format": ","}
             ]
         },
-        title: "Visa Category Trends (2013–14 to 2023–24)"
+        "config": {
+            "view": {"stroke": "transparent"},
+            "axis": {"grid": false}
+        }
     };
 
-    // Embed both charts into your HTML
-    vegaEmbed("#worldMap", worldMapSpec, { actions: false }).catch(console.error);
-    vegaEmbed("#stateChart", visaChartSpec, { actions: false }).catch(console.error);
+    // Embed charts
+    vegaEmbed('#worldMap', mapSpec, {actions: false}).catch(error => {
+        console.error("Error embedding world map:", error);
+        // Fallback visualization
+        const fallbackSpec = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Migration by country (fallback)",
+            "width": "container",
+            "height": 400,
+            "data": {
+                "values": migrationData
+            },
+            "mark": "bar",
+            "encoding": {
+                "x": {
+                    "field": "country",
+                    "type": "nominal",
+                    "title": "Country",
+                    "axis": {"labelAngle": 45}
+                },
+                "y": {
+                    "field": "migrants",
+                    "type": "quantitative",
+                    "title": "Migrants to Australia"
+                },
+                "color": {
+                    "field": "country",
+                    "type": "nominal",
+                    "legend": null
+                },
+                "tooltip": [
+                    {"field": "country", "title": "Country"},
+                    {"field": "migrants", "title": "Migrants", "format": ","}
+                ]
+            }
+        };
+        vegaEmbed('#worldMap', fallbackSpec, {actions: false});
+    });
+    
+    vegaEmbed('#stateChart', stateSpec, {actions: false});
 }
