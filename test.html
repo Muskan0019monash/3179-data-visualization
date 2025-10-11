@@ -2,79 +2,322 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migration to Australia — Vega-Lite Visualizations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Migration to Australia — Map & State Settlement Patterns</title>
+
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
   <style>
-    body {
-      font-family: "Inter", sans-serif;
-      margin: 40px;
-      background: #fafafa;
-    }
-    h1 {
-      text-align: center;
-    }
-    .chart {
-      margin: 50px auto;
-      max-width: 900px;
-    }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 24px; background:#fafafa; color:#222; }
+    header { text-align:center; margin-bottom:20px; }
+    h1 { margin:0; font-size:1.6rem; color:#4a235a; }
+    .container { max-width:1100px; margin:0 auto; }
+    .chart { background:#fff; border-radius:8px; padding:12px; box-shadow:0 6px 14px rgba(0,0,0,0.06); margin-bottom:18px; }
+    .chart .title { font-weight:600; color:#333; margin-bottom:8px; }
+    #mapChart { height:420px; }
+    #stateChart { height:420px; }
+    @media (max-width:700px){ #mapChart, #stateChart { height:360px; } }
   </style>
 </head>
 <body>
-  <h1>Migration to Australia (2013–2024)</h1>
+  <header>
+    <h1>Migration to Australia — Map & State Settlement Patterns</h1>
+  </header>
 
-  <div class="chart" id="chart1"></div>
-  <div class="chart" id="chart2"></div>
-  <div class="chart" id="chart3"></div>
+  <div class="container">
+    <div class="chart">
+      <div class="title">World Map — Country Points (point size ∝ migrants)</div>
+      <div id="mapChart"></div>
+    </div>
+
+    <div class="chart">
+      <div class="title">State Settlement Patterns — aggregated migrants by state</div>
+      <div id="stateChart"></div>
+    </div>
+  </div>
 
   <script>
-    // 1️⃣ Line Chart — Arrivals vs Departures
-    const chart1 = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Migrant Arrivals and Departures (2013–2024)",
-      "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Category == 'Arrivals' || datum.Category == 'Departures'"}],
-      "mark": {"type": "line", "point": true},
-      "encoding": {
-        "x": {"field": "Year", "type": "ordinal"},
-        "y": {"field": "Migrants", "type": "quantitative"},
-        "color": {"field": "Category", "type": "nominal"}
-      }
+    // Sample data (same structure as your dashboard)
+    const migrationData = [
+      { country: "United Kingdom", lon: -0.1276, lat: 51.5072, migrants: 1000000, year: 2023, region: "Europe", settlement_state: "NSW" },
+      { country: "China", lon: 116.4074, lat: 39.9042, migrants: 650000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "India", lon: 77.2090, lat: 28.6139, migrants: 600000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "New Zealand", lon: 174.7633, lat: -36.8485, migrants: 550000, year: 2023, region: "Oceania", settlement_state: "QLD" },
+      { country: "Vietnam", lon: 105.8544, lat: 21.0285, migrants: 300000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Italy", lon: 12.4964, lat: 41.9028, migrants: 250000, year: 2023, region: "Europe", settlement_state: "SA" },
+      { country: "Philippines", lon: 121.7740, lat: 12.8797, migrants: 200000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "South Africa", lon: 28.0473, lat: -26.2041, migrants: 180000, year: 2023, region: "Africa", settlement_state: "NSW" },
+      { country: "Malaysia", lon: 101.6869, lat: 3.1390, migrants: 170000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Sri Lanka", lon: 80.7718, lat: 7.8731, migrants: 150000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Germany", lon: 10.4515, lat: 51.1657, migrants: 140000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Lebanon", lon: 35.8623, lat: 33.8547, migrants: 130000, year: 2023, region: "Middle East", settlement_state: "NSW" },
+      { country: "Greece", lon: 21.8243, lat: 39.0742, migrants: 120000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Thailand", lon: 100.9925, lat: 15.8700, migrants: 110000, year: 2023, region: "Asia", settlement_state: "QLD" },
+      { country: "Indonesia", lon: 113.9213, lat: -0.7893, migrants: 100000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "South Korea", lon: 127.7669, lat: 35.9078, migrants: 95000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Japan", lon: 138.2529, lat: 36.2048, migrants: 90000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Nepal", lon: 85.3240, lat: 28.3949, migrants: 85000, year: 2023, region: "Asia", settlement_state: "QLD" },
+      { country: "Bangladesh", lon: 90.3563, lat: 23.6850, migrants: 80000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Pakistan", lon: 69.3451, lat: 30.3753, migrants: 75000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Iran", lon: 53.6880, lat: 32.4279, migrants: 70000, year: 2023, region: "Middle East", settlement_state: "NSW" },
+      { country: "Turkey", lon: 35.2433, lat: 38.9637, migrants: 65000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Afghanistan", lon: 67.7090, lat: 33.9391, migrants: 60000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Myanmar", lon: 95.9560, lat: 21.9162, migrants: 55000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "Brazil", lon: -51.9253, lat: -14.2350, migrants: 50000, year: 2023, region: "South America", settlement_state: "QLD" }
+    ];
+
+    // State colour mapping (consistent)
+    const stateColors = {
+      "NSW": "#3498db",
+      "VIC": "#e74c3c",
+      "QLD": "#f39c12",
+      "WA":  "#9b59b6",
+      "SA":  "#2ecc71",
+      "TAS": "#1abc9c",
+      "NT":  "#e67e22",
+      "ACT": "#95a5a6"
+    };
+    const stateDomain = Object.keys(stateColors);
+    const stateRange = Object.values(stateColors);
+
+    // Prepare aggregated points for map (one point per country)
+    const countryAgg = {};
+    migrationData.forEach(d => {
+      const key = d.country;
+      if (!countryAgg[key]) countryAgg[key] = { country: d.country, lon: d.lon, lat: d.lat, migrants: 0, settlement_state: d.settlement_state || "" };
+      countryAgg[key].migrants += d.migrants || 0;
+    });
+    const mapData = Object.values(countryAgg);
+
+    // Map spec — size encodes migrants; colour encodes settlement_state but legend removed
+    const mapSpec = {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "width":"container","height":420,
+      "layer":[
+        {
+          "data": {
+            "url":"https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
+            "format": {"type":"topojson","feature":"countries"}
+          },
+          "mark": {"type":"geoshape","fill":"#f5f5f5","stroke":"#999","strokeWidth":0.3},
+          "projection":{"type":"equirectangular"}
+        },
+        {
+          "data": {"values": mapData},
+          "mark": {"type":"circle","tooltip":true,"stroke":"#222","strokeWidth":0.6,"opacity":0.95},
+          "encoding": {
+            "longitude": {"field":"lon","type":"quantitative"},
+            "latitude": {"field":"lat","type":"quantitative"},
+            "size": {
+              "field":"migrants","type":"quantitative",
+              "scale":{"range":[40,1800]},
+              "legend": null
+            },
+            "color": {
+              "field":"settlement_state","type":"nominal",
+              "scale": {"domain": stateDomain, "range": stateRange},
+              "legend": null
+            },
+            "tooltip":[
+              {"field":"country","type":"nominal","title":"Country"},
+              {"field":"migrants","type":"quantitative","title":"Migrants","format":","},
+              {"field":"settlement_state","type":"nominal","title":"State"}
+            ]
+          }
+        }
+      ],
+      "config": {"view": {"stroke":"transparent"}, "background":"transparent"}
     };
 
-    // 2️⃣ Stacked Bar Chart — Visa & Citizenship Groups
-    const chart2 = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Overseas Migrant Arrivals by Visa & Citizenship Group",
-      "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Category == 'Visa'"}],
-      "mark": "bar",
+    // State bar chart — aggregated, with consistent colours and formatted axis
+    const stateSpec = {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "width":"container","height":420,
+      "data": {"values": migrationData},
+      "mark": {"type":"bar","cornerRadius":4},
       "encoding": {
-        "x": {"field": "Year", "type": "ordinal"},
-        "y": {"aggregate": "sum", "field": "Migrants"},
-        "color": {"field": "Group", "type": "nominal", "title": "Group"}
-      }
+        "x": {"field":"settlement_state","type":"nominal","title":"Australian State","sort":"-y"},
+        "y": {"aggregate":"sum","field":"migrants","type":"quantitative","title":"Number of Migrants","axis":{"format":".0f"}},
+        "color": {
+          "field":"settlement_state","type":"nominal",
+          "scale": {"domain": stateDomain, "range": stateRange},
+          "legend": {"title":"State","orient":"bottom"}
+        },
+        "tooltip":[
+          {"field":"settlement_state","title":"State"},
+          {"aggregate":"sum","field":"migrants","title":"Migrants","format":","}
+        ]
+      },
+      "config": {"view":{"stroke":"transparent"}, "axis":{"grid":false}}
     };
 
-    // 3️⃣ Grouped Bar Chart — Region of Birth
-    const chart3 = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Migrant Arrivals by Region of Birth (Selected Years)",
-      "data": {"url": "migration.csv"},
-      "transform": [{"filter": "datum.Category == 'Region'"}],
-      "mark": "bar",
-      "encoding": {
-        "x": {"field": "Region", "type": "nominal", "axis": {"labelAngle": -25}},
-        "y": {"aggregate": "sum", "field": "Migrants"},
-        "color": {"field": "Year", "type": "ordinal"}
-      }
+    // Embed both charts
+    vegaEmbed('#mapChart', mapSpec, {actions:false}).catch(e => console.error(e));
+    vegaEmbed('#stateChart', stateSpec, {actions:false}).catch(e => console.error(e));
+  </script>
+</body>
+</html>
+```// filepath: c:\Users\muska\OneDrive\Desktop\FIT3179\test02.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Migration to Australia — Map & State Settlement Patterns</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <style>
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 24px; background:#fafafa; color:#222; }
+    header { text-align:center; margin-bottom:20px; }
+    h1 { margin:0; font-size:1.6rem; color:#4a235a; }
+    .container { max-width:1100px; margin:0 auto; }
+    .chart { background:#fff; border-radius:8px; padding:12px; box-shadow:0 6px 14px rgba(0,0,0,0.06); margin-bottom:18px; }
+    .chart .title { font-weight:600; color:#333; margin-bottom:8px; }
+    #mapChart { height:420px; }
+    #stateChart { height:420px; }
+    @media (max-width:700px){ #mapChart, #stateChart { height:360px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Migration to Australia — Map & State Settlement Patterns</h1>
+  </header>
+
+  <div class="container">
+    <div class="chart">
+      <div class="title">World Map — Country Points (point size ∝ migrants)</div>
+      <div id="mapChart"></div>
+    </div>
+
+    <div class="chart">
+      <div class="title">State Settlement Patterns — aggregated migrants by state</div>
+      <div id="stateChart"></div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data (same structure as your dashboard)
+    const migrationData = [
+      { country: "United Kingdom", lon: -0.1276, lat: 51.5072, migrants: 1000000, year: 2023, region: "Europe", settlement_state: "NSW" },
+      { country: "China", lon: 116.4074, lat: 39.9042, migrants: 650000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "India", lon: 77.2090, lat: 28.6139, migrants: 600000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "New Zealand", lon: 174.7633, lat: -36.8485, migrants: 550000, year: 2023, region: "Oceania", settlement_state: "QLD" },
+      { country: "Vietnam", lon: 105.8544, lat: 21.0285, migrants: 300000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Italy", lon: 12.4964, lat: 41.9028, migrants: 250000, year: 2023, region: "Europe", settlement_state: "SA" },
+      { country: "Philippines", lon: 121.7740, lat: 12.8797, migrants: 200000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "South Africa", lon: 28.0473, lat: -26.2041, migrants: 180000, year: 2023, region: "Africa", settlement_state: "NSW" },
+      { country: "Malaysia", lon: 101.6869, lat: 3.1390, migrants: 170000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Sri Lanka", lon: 80.7718, lat: 7.8731, migrants: 150000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Germany", lon: 10.4515, lat: 51.1657, migrants: 140000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Lebanon", lon: 35.8623, lat: 33.8547, migrants: 130000, year: 2023, region: "Middle East", settlement_state: "NSW" },
+      { country: "Greece", lon: 21.8243, lat: 39.0742, migrants: 120000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Thailand", lon: 100.9925, lat: 15.8700, migrants: 110000, year: 2023, region: "Asia", settlement_state: "QLD" },
+      { country: "Indonesia", lon: 113.9213, lat: -0.7893, migrants: 100000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "South Korea", lon: 127.7669, lat: 35.9078, migrants: 95000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Japan", lon: 138.2529, lat: 36.2048, migrants: 90000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Nepal", lon: 85.3240, lat: 28.3949, migrants: 85000, year: 2023, region: "Asia", settlement_state: "QLD" },
+      { country: "Bangladesh", lon: 90.3563, lat: 23.6850, migrants: 80000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Pakistan", lon: 69.3451, lat: 30.3753, migrants: 75000, year: 2023, region: "Asia", settlement_state: "VIC" },
+      { country: "Iran", lon: 53.6880, lat: 32.4279, migrants: 70000, year: 2023, region: "Middle East", settlement_state: "NSW" },
+      { country: "Turkey", lon: 35.2433, lat: 38.9637, migrants: 65000, year: 2023, region: "Europe", settlement_state: "VIC" },
+      { country: "Afghanistan", lon: 67.7090, lat: 33.9391, migrants: 60000, year: 2023, region: "Asia", settlement_state: "NSW" },
+      { country: "Myanmar", lon: 95.9560, lat: 21.9162, migrants: 55000, year: 2023, region: "Asia", settlement_state: "WA" },
+      { country: "Brazil", lon: -51.9253, lat: -14.2350, migrants: 50000, year: 2023, region: "South America", settlement_state: "QLD" }
+    ];
+
+    // State colour mapping (consistent)
+    const stateColors = {
+      "NSW": "#3498db",
+      "VIC": "#e74c3c",
+      "QLD": "#f39c12",
+      "WA":  "#9b59b6",
+      "SA":  "#2ecc71",
+      "TAS": "#1abc9c",
+      "NT":  "#e67e22",
+      "ACT": "#95a5a6"
+    };
+    const stateDomain = Object.keys(stateColors);
+    const stateRange = Object.values(stateColors);
+
+    // Prepare aggregated points for map (one point per country)
+    const countryAgg = {};
+    migrationData.forEach(d => {
+      const key = d.country;
+      if (!countryAgg[key]) countryAgg[key] = { country: d.country, lon: d.lon, lat: d.lat, migrants: 0, settlement_state: d.settlement_state || "" };
+      countryAgg[key].migrants += d.migrants || 0;
+    });
+    const mapData = Object.values(countryAgg);
+
+    // Map spec — size encodes migrants; colour encodes settlement_state but legend removed
+    const mapSpec = {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "width":"container","height":420,
+      "layer":[
+        {
+          "data": {
+            "url":"https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
+            "format": {"type":"topojson","feature":"countries"}
+          },
+          "mark": {"type":"geoshape","fill":"#f5f5f5","stroke":"#999","strokeWidth":0.3},
+          "projection":{"type":"equirectangular"}
+        },
+        {
+          "data": {"values": mapData},
+          "mark": {"type":"circle","tooltip":true,"stroke":"#222","strokeWidth":0.6,"opacity":0.95},
+          "encoding": {
+            "longitude": {"field":"lon","type":"quantitative"},
+            "latitude": {"field":"lat","type":"quantitative"},
+            "size": {
+              "field":"migrants","type":"quantitative",
+              "scale":{"range":[40,1800]},
+              "legend": null
+            },
+            "color": {
+              "field":"settlement_state","type":"nominal",
+              "scale": {"domain": stateDomain, "range": stateRange},
+              "legend": null
+            },
+            "tooltip":[
+              {"field":"country","type":"nominal","title":"Country"},
+              {"field":"migrants","type":"quantitative","title":"Migrants","format":","},
+              {"field":"settlement_state","type":"nominal","title":"State"}
+            ]
+          }
+        }
+      ],
+      "config": {"view": {"stroke":"transparent"}, "background":"transparent"}
     };
 
-    vegaEmbed("#chart1", chart1);
-    vegaEmbed("#chart2", chart2);
-    vegaEmbed("#chart3", chart3);
+    // State bar chart — aggregated, with consistent colours and formatted axis
+    const stateSpec = {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "width":"container","height":420,
+      "data": {"values": migrationData},
+      "mark": {"type":"bar","cornerRadius":4},
+      "encoding": {
+        "x": {"field":"settlement_state","type":"nominal","title":"Australian State","sort":"-y"},
+        "y": {"aggregate":"sum","field":"migrants","type":"quantitative","title":"Number of Migrants","axis":{"format":".0f"}},
+        "color": {
+          "field":"settlement_state","type":"nominal",
+          "scale": {"domain": stateDomain, "range": stateRange},
+          "legend": {"title":"State","orient":"bottom"}
+        },
+        "tooltip":[
+          {"field":"settlement_state","title":"State"},
+          {"aggregate":"sum","field":"migrants","title":"Migrants","format":","}
+        ]
+      },
+      "config": {"view":{"stroke":"transparent"}, "axis":{"grid":false}}
+    };
+
+    // Embed both charts
+    vegaEmbed('#mapChart', mapSpec, {actions:false}).catch(e => console.error(e));
+    vegaEmbed('#stateChart', stateSpec, {actions:false}).catch(e => console.error(e));
   </script>
 </body>
 </html>
