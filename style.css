@@ -15,16 +15,6 @@
     --text: #333333;
     --text-light: #666666;
     --border: #e0e0e0;
-    
-    /* State colors */
-    --nsw: #3498db;
-    --vic: #e74c3c;
-    --qld: #f39c12;
-    --wa: #9b59b6;
-    --sa: #2ecc71;
-    --tas: #1abc9c;
-    --nt: #e67e22;
-    --act: #95a5a6;
 }
 
 body {

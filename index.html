@@ -26,7 +26,7 @@
                 </div>
                 <div id="worldMap" class="chart-container"></div>
                 <div class="chart-description">
-                    <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. The United Kingdom leads with over 1 million migrants, followed by China and India. The map highlights Australia's position as a "melting pot" of cultures from around the world.</p>
+                    <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. The United Kingdom leads with over 1 million migrants, followed by China and India.</p>
                 </div>
             </div>
             <div class="chart-box">
@@ -35,7 +35,7 @@
                 </div>
                 <div id="stateChart" class="chart-container"></div>
                 <div class="chart-description">
-                    <p><strong>Insight:</strong> New South Wales and Victoria are the primary gateways for migrants, attracting over 60% of newcomers. These states offer the "golden ticket" with established migrant communities and diverse economic opportunities.</p>
+                    <p><strong>Insight:</strong> New South Wales and Victoria are the primary gateways for migrants, attracting over 60% of newcomers.</p>
                 </div>
             </div>
         </div>
@@ -45,7 +45,124 @@
         <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
     </footer>
 
-    <script src="data.js"></script>
-    <script src="charts.js"></script>
+    <script>
+        // Migration data
+        const migrationData = [
+            { country: "United Kingdom", lon: -0.1276, lat: 51.5072, migrants: 1000000, settlement_state: "NSW" },
+            { country: "China", lon: 116.4074, lat: 39.9042, migrants: 650000, settlement_state: "VIC" },
+            { country: "India", lon: 77.2090, lat: 28.6139, migrants: 600000, settlement_state: "NSW" },
+            { country: "New Zealand", lon: 174.7633, lat: -36.8485, migrants: 550000, settlement_state: "QLD" },
+            { country: "Vietnam", lon: 105.8544, lat: 21.0285, migrants: 300000, settlement_state: "VIC" },
+            { country: "Italy", lon: 12.4964, lat: 41.9028, migrants: 250000, settlement_state: "SA" },
+            { country: "Philippines", lon: 121.7740, lat: 12.8797, migrants: 200000, settlement_state: "WA" },
+            { country: "South Africa", lon: 28.0473, lat: -26.2041, migrants: 180000, settlement_state: "NSW" },
+            { country: "Malaysia", lon: 101.6869, lat: 3.1390, migrants: 170000, settlement_state: "VIC" },
+            { country: "Sri Lanka", lon: 80.7718, lat: 7.8731, migrants: 150000, settlement_state: "NSW" }
+        ];
+
+        // State colors
+        const stateColors = {
+            "NSW": "#3498db",
+            "VIC": "#e74c3c", 
+            "QLD": "#f39c12",
+            "WA": "#9b59b6",
+            "SA": "#2ecc71"
+        };
+
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCharts();
+        });
+
+        function renderCharts() {
+            // World Map Chart
+            const mapSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "width": "container",
+                "height": 400,
+                "layer": [
+                    {
+                        "data": {
+                            "url": "https://cdn.jsdelivr.net/npm/vega-datasets@2/data/world-110m.json",
+                            "format": {"type": "topojson", "feature": "countries"}
+                        },
+                        "mark": {"type": "geoshape", "fill": "#f0f0f0", "stroke": "#000", "strokeWidth": 0.3},
+                        "projection": {"type": "equirectangular"}
+                    },
+                    {
+                        "data": {"values": migrationData},
+                        "mark": {"type": "circle", "tooltip": true, "stroke": "#000", "strokeWidth": 1},
+                        "encoding": {
+                            "longitude": {"field": "lon", "type": "quantitative"},
+                            "latitude": {"field": "lat", "type": "quantitative"},
+                            "size": {
+                                "field": "migrants", 
+                                "type": "quantitative",
+                                "title": "Migrants to Australia",
+                                "scale": {"range": [100, 2000]},
+                                "legend": {"orient": "bottom", "titleFontSize": 12}
+                            },
+                            "color": {
+                                "field": "migrants",
+                                "type": "quantitative", 
+                                "title": "Number of Migrants",
+                                "scale": {"scheme": "viridis"},
+                                "legend": {"orient": "right", "titleFontSize": 12}
+                            },
+                            "tooltip": [
+                                {"field": "country", "title": "Country"},
+                                {"field": "migrants", "title": "Migrants", "format": ","},
+                                {"field": "settlement_state", "title": "State"}
+                            ]
+                        }
+                    }
+                ],
+                "config": {"view": {"stroke": "transparent"}, "background": "transparent"}
+            };
+
+            // State Bar Chart
+            const stateSpec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json", 
+                "width": "container",
+                "height": 400,
+                "data": {"values": migrationData},
+                "mark": {"type": "bar", "cornerRadius": 4},
+                "encoding": {
+                    "x": {
+                        "field": "settlement_state",
+                        "type": "nominal", 
+                        "title": "Australian State",
+                        "axis": {"labelAngle": 0},
+                        "sort": "-y"
+                    },
+                    "y": {
+                        "aggregate": "sum",
+                        "field": "migrants", 
+                        "type": "quantitative",
+                        "title": "Number of Migrants"
+                    },
+                    "color": {
+                        "field": "settlement_state",
+                        "type": "nominal",
+                        "title": "State", 
+                        "scale": {
+                            "domain": Object.keys(stateColors),
+                            "range": Object.values(stateColors)
+                        },
+                        "legend": {"orient": "bottom", "titleFontSize": 12}
+                    },
+                    "tooltip": [
+                        {"field": "settlement_state", "title": "State"},
+                        {"aggregate": "sum", "field": "migrants", "title": "Migrants", "format": ","}
+                    ]
+                },
+                "config": {"view": {"stroke": "transparent"}, "axis": {"grid": false}}
+            };
+
+            // Embed charts
+            vegaEmbed('#worldMap', mapSpec, {actions: false});
+            vegaEmbed('#stateChart', stateSpec, {actions: false});
+        }
+    </script>
 </body>
 </html>
