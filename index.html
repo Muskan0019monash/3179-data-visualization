@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Migration to Australia Dashboard</title>
+    <title>Migration Dashboard - Map & States</title>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -19,102 +19,23 @@
     </header>
 
     <div class="dashboard-container">
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-value" id="totalMigrants">-</div>
-                <div class="stat-label">Total Migrants</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-flag"></i>
-                </div>
-                <div class="stat-value" id="sourceCountries">-</div>
-                <div class="stat-label">Source Countries</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <div class="stat-value" id="australianStates">-</div>
-                <div class="stat-label">Australian States</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-value" id="growthRate">-</div>
-                <div class="stat-label">Growth Rate</div>
-            </div>
-        </div>
-
-        <div class="controls-container">
-            <div class="filter-group">
-                <label for="regionFilter"><i class="fas fa-globe"></i> Region</label>
-                <select id="regionFilter">
-                    <option value="All">All Regions</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="yearFilter"><i class="fas fa-calendar"></i> Year</label>
-                <select id="yearFilter">
-                    <option value="All">All Years</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="stateFilter"><i class="fas fa-map-marker-alt"></i> Australian State</label>
-                <select id="stateFilter">
-                    <option value="All">All States</option>
-                </select>
-            </div>
-            <button class="reset-btn" id="resetFilters"><i class="fas fa-redo"></i> Reset Filters</button>
-        </div>
-
         <div class="charts-container">
-            <div class="chart-row">
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-globe-americas"></i> World Migration Map</h2>
-                    </div>
-                    <div id="worldMap" class="chart-container"></div>
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h2><i class="fas fa-globe-americas"></i> Global Migration Flow</h2>
                 </div>
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-chart-bar"></i> Migration by Australian State</h2>
-                    </div>
-                    <div id="stateChart" class="chart-container"></div>
+                <div id="worldMap" class="chart-container"></div>
+                <div class="chart-description">
+                    <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. The United Kingdom leads with over 1 million migrants, followed by China and India. The map highlights Australia's position as a "melting pot" of cultures from around the world.</p>
                 </div>
             </div>
-            
-            <div class="chart-row">
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-layer-group"></i> Visa & Citizenship Groups</h2>
-                    </div>
-                    <div id="visaChart" class="chart-container"></div>
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-bar"></i> State Settlement Patterns</h2>
                 </div>
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-exchange-alt"></i> Migrant Arrivals & Departures</h2>
-                    </div>
-                    <div id="arrivalDepartureChart" class="chart-container"></div>
-                </div>
-            </div>
-            
-            <div class="chart-row">
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-chart-line"></i> Migration Trends Over Time</h2>
-                    </div>
-                    <div id="trendChart" class="chart-container"></div>
-                </div>
-                <div class="chart-box">
-                    <div class="chart-header">
-                        <h2><i class="fas fa-globe"></i> Migration by World Regions</h2>
-                    </div>
-                    <div id="regionChart" class="chart-container"></div>
+                <div id="stateChart" class="chart-container"></div>
+                <div class="chart-description">
+                    <p><strong>Insight:</strong> New South Wales and Victoria are the primary gateways for migrants, attracting over 60% of newcomers. These states offer the "golden ticket" with established migrant communities and diverse economic opportunities.</p>
                 </div>
             </div>
         </div>
@@ -124,6 +45,7 @@
         <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
     </footer>
 
-    <script src="main.js"></script>
+    <script src="data.js"></script>
+    <script src="charts.js"></script>
 </body>
 </html>
