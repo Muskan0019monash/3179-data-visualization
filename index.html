@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Dashboard - Map & States</title>
+
+    <!-- Vega Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-globe-asia"></i> Global Migration to Australia Dashboard</h1>
+            <p class="subtitle">Interactive Analysis of Global Migration Patterns and Trends</p>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="charts-container">
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h2><i class="fas fa-globe-americas"></i> Global Migration Flow</h2>
+                </div>
+                <div id="worldMap" class="chart-container"></div>
+                <div class="chart-description">
+                    <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. The United Kingdom leads with over 1 million migrants, followed by China and India. The map highlights Australia's position as a "melting pot" of cultures from around the world.</p>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-bar"></i> State Settlement Patterns</h2>
+                </div>
+                <div id="stateChart" class="chart-container"></div>
+                <div class="chart-description">
+                    <p><strong>Insight:</strong> New South Wales and Victoria are the primary gateways for migrants, attracting over 60% of newcomers. These states offer the "golden ticket" with established migrant communities and diverse economic opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
