@@ -33,9 +33,6 @@ const stateColors = {
   "QLD": "#f39c12",
   "WA": "#9b59b6",
   "SA": "#2ecc71",
-  "TAS": "#1abc9c",
-  "NT": "#e67e22",
-  "ACT": "#95a5a6"
 };
 
 document.addEventListener('DOMContentLoaded', function () {
