@@ -207,13 +207,31 @@ header h1 {
     min-width: 150px;
 }
 
+/* Footer Styles */
 footer {
-    text-align: center;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
     padding: 2rem 1rem;
-    margin-top: 2rem;
-    background: var(--primary);
-    color: #ddd;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-credits {
+    text-align: center;
+}
+
+.footer-credits p {
+    margin: 0;
     font-size: 0.9rem;
+    color: #ddd;
+}
+
+.footer-credits strong {
+    color: #f1c40f;
 }
 
 @media (max-width: 768px) {
