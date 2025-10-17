@@ -1,120 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Migration to Australia Dashboard</title>
-
-  <!-- Vega Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- External Styles -->
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Migration to Australia Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <h1><i class="fas fa-globe-asia"></i> Global Migration to Australia Dashboard</h1>
-      <p class="subtitle">Interactive Analysis of Global Migration Patterns and Trends</p>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-globe-asia"></i> Global Migration to Australia Dashboard</h1>
+            <p class="subtitle">Interactive Analysis of Global Migration Patterns and Trends</p>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="intro-container">
+            <h2><i class="fas fa-info-circle"></i> About This Dashboard</h2>
+            <div class="intro-text">
+                <p>Welcome to the Global Migration to Australia Dashboard, an interactive visualization tool that explores migration patterns and trends to Australia from around the world. This dashboard provides insights into the diverse origins of migrants, their settlement patterns across Australian states, and how migration has evolved over time.</p>
+                
+                <p>Australia has long been a destination for migrants seeking new opportunities, with over 30% of its population born overseas. The data reveals fascinating trends, including the shift from traditional European migration sources to increasing numbers from Asian countries, reflecting Australia's growing economic and cultural ties with the Asia-Pacific region.</p>
+                
+                <p>Explore the interactive charts below to discover how migration policies, economic conditions, and global events have shaped Australia's demographic landscape.</p>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-globe-americas"></i> Global Migration Flow</h2>
+                    </div>
+                    <div id="worldMap" class="chart-container map-container"></div>
+                    <div class="chart-description">
+                        <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. Hover over countries to see detailed migration numbers and settlement patterns.</p>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-bar"></i> State Settlement Patterns</h2>
+                    </div>
+                    <div id="stateChart" class="chart-container"></div>
+                    <div class="chart-description">
+                        <p><strong>Insight:</strong> New South Wales (NSW) and Victoria (VIC) are the primary destinations for migrants, attracting diverse populations from around the world.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-pie"></i> Top Source Countries</h2>
+                    </div>
+                    <div id="countryChart" class="chart-container"></div>
+                    <div class="chart-description">
+                        <p><strong>Insight:</strong> India and China lead as the top source countries for migration to Australia, reflecting strong economic and educational ties.</p>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-exchange-alt"></i> Quarterly Migration Trends</h2>
+                    </div>
+                    <div id="trendChart" class="chart-container"></div>
+                    <div class="chart-description">
+                        <p><strong>Insight:</strong> This chart shows quarterly migration trends, highlighting seasonal patterns and overall growth in net migration over time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <div class="dashboard-container">
-    <div class="intro-container">
-      <h2><i class="fas fa-info-circle"></i> About This Dashboard</h2>
-      <div class="intro-text">
-        <p>Welcome to the Global Migration to Australia Dashboard, an interactive visualization tool that explores migration patterns and trends to Australia from around the world. This dashboard provides insights into the diverse origins of migrants, their settlement patterns across Australian states, and how migration has evolved over time.</p>
-        <p>Australia has long been a destination for migrants seeking new opportunities, with over 30% of its population born overseas. The data reveals fascinating trends, including the shift from traditional European migration sources to increasing numbers from Asian countries, reflecting Australia's growing economic and cultural ties with the Asia-Pacific region.</p>
-        <p>Explore the interactive charts below to discover how migration policies, economic conditions, and global events have shaped Australia's demographic landscape over the past decade.</p>
-      </div>
-    </div>
+    <footer>
+        <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
+    </footer>
 
-    <div class="charts-container">
-      <div class="chart-row">
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-globe-americas"></i> Global Migration Flow</h2>
-          </div>
-          <div id="worldMap" class="chart-container map-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> This map visualizes the global distribution of migrants to Australia. The United Kingdom leads with over 1 million migrants, followed by China and India. The map highlights Australia's position as a "melting pot" of cultures from around the world.</p>
-          </div>
-        </div>
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-chart-bar"></i> State Settlement Patterns</h2>
-          </div>
-          <div id="stateChart" class="chart-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> New South Wales and Victoria are the primary gateways for migrants, attracting over 60% of newcomers. These states offer the "golden ticket" with established migrant communities and diverse economic opportunities.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-chart-pie"></i> Regional Migration Sources</h2>
-          </div>
-          <div id="regionChart" class="chart-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> Asia dominates as the primary source region, representing a "changing of the guard" from traditional European migration. This shift reflects Australia's geographic position and growing economic ties with Asian nations.</p>
-          </div>
-        </div>
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-exchange-alt"></i> Top Source Countries</h2>
-          </div>
-          <div id="countryChart" class="chart-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> The United Kingdom remains the "old faithful" with the highest migrant numbers, while China and India represent the "new frontier" of migration. This demonstrates Australia's ability to maintain traditional ties while embracing new relationships.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-chart-line"></i> Migration Trends Over Time</h2>
-          </div>
-          <div id="trendChart" class="chart-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> This line chart shows migration trends over time, highlighting the significant impact of the COVID-19 pandemic in 2020-21. The recovery since then demonstrates Australia's continued appeal as a migration destination.</p>
-          </div>
-        </div>
-        <div class="chart-box">
-          <div class="chart-header">
-            <h2><i class="fas fa-layer-group"></i> Visa & Citizenship Groups</h2>
-          </div>
-          <div class="chart-filter">
-            <label for="visaTypeFilter">View by Visa Type:</label>
-            <select id="visaTypeFilter">
-              <option value="All">All Visa Types</option>
-              <option value="temporary">Temporary</option>
-              <option value="australian">Australian Citizens</option>
-              <option value="permanent">Permanent</option>
-              <option value="nz">New Zealand Citizens</option>
-            </select>
-          </div>
-          <div id="visaChart" class="chart-container"></div>
-          <div class="chart-description">
-            <p><strong>Insight:</strong> Temporary visa holders have become the dominant group in recent years, reflecting Australia's shift toward temporary migration pathways. This "flexible workforce" approach allows Australia to respond to changing economic needs.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <p>Data visualized using Vega-Lite | Source: Migration Dataset</p>
-  </footer>
-
-  <!-- External JavaScript -->
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
