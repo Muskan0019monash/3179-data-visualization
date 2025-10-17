@@ -24,7 +24,6 @@
     --qld: #f39c12;    /* Queensland - Orange */
     --wa: #9b59b6;     /* Western Australia - Purple */
     --sa: #2ecc71;     /* South Australia - Green */
-    --nt: #e67e22;     /* Northern Territory - Orange */
 }
 
 body {
@@ -172,7 +171,7 @@ header h1 {
 }
 
 .map-container {
-    min-height: 450px;
+    min-height: 450px; /* Increased height for the map */
 }
 
 .chart-description {
@@ -227,7 +226,7 @@ footer {
     }
     
     .map-container {
-        min-height: 350px;
+        min-height: 350px; /* Adjusted for mobile */
     }
     
     .intro-container {
