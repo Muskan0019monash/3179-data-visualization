@@ -20,17 +20,17 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;">Skip to content</a>
+    <a class="skip-link" href="#main-content">Skip to content</a>
 
     <header>
         <div class="header-content">
             <h1><i class="fas fa-globe-asia" aria-hidden="true"></i> Global Migration to Australia</h1>
-            <p class="subtitle" style="margin-top:0.5rem;">Interactive dashboard — explore origins, settlement, and trends (data years shown per chart).</p>
+            <p class="subtitle">Interactive dashboard — explore origins, settlement, and trends (data years shown per chart).</p>
         </div>
     </header>
 
     <main id="main-content" role="main" class="dashboard-container" aria-labelledby="dashboard-title">
-        <h2 id="dashboard-title" style="display:none">Global Migration to Australia Dashboard</h2>
+        <h2 id="dashboard-title" class="sr-only">Global Migration to Australia Dashboard</h2>
 
         <!-- Shortened intro -->
         <section class="intro-container" role="region" aria-labelledby="about-heading">
@@ -46,8 +46,8 @@
                 <div class="chart-box full-width-map" id="mapBox">
                     <div class="chart-header">
                         <h2><i class="fas fa-globe-americas" aria-hidden="true"></i> Global Migration Flow</h2>
-                        <div style="display:flex;gap:8px;align-items:center;">
-                            <label for="mapFullscreenToggle" style="font-size:0.9rem;margin-right:6px;">Full screen</label>
+                        <div class="fullscreen-toggle">
+                            <label for="mapFullscreenToggle">Full screen</label>
                             <input id="mapFullscreenToggle" type="checkbox" title="Toggle full screen map" />
                         </div>
                     </div>
@@ -59,12 +59,12 @@
                     </div>
 
                     <div class="chart-description" id="worldMap-desc">
-                        <p><strong>Data year(s):</strong> 2023 (country-level snapshot). <strong>Insight:</strong> Marker size indicates migrant counts — UK, China and India are dominant source countries. Bubble sizes are scaled to avoid excessive overlap with nearby countries while remaining proportional to migrant counts.</p>
+                        <p><strong>Data year(s):</strong> 2023 (country-level snapshot). <strong>Insight:</strong> The United Kingdom, China, and India emerge as the three largest sources of migrants to Australia, with the UK leading significantly. This geographic diversity highlights Australia's appeal across multiple continents, though Asian and European nations dominate the top contributors.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- State / Region / Top sources -->
+            <!-- State / Region -->
             <div class="chart-row">
                 <div class="chart-box">
                     <div class="chart-header">
@@ -72,7 +72,7 @@
                     </div>
                     <div id="stateChart" class="chart-container" role="region" aria-labelledby="stateChart-desc"></div>
                     <div class="chart-description" id="stateChart-desc">
-                        <p><strong>Data years:</strong> 2023 (snapshot). <strong>Insight:</strong> NSW and VIC together receive the majority share — compare totals to assess distribution across states and plan resource allocation per state (health, education, settlement services).</p>
+                        <p><strong>Data years:</strong> 2023 (snapshot). <strong>Insight:</strong> New South Wales and Victoria dominate migrant settlement, collectively attracting over 60% of all arrivals. This concentration in Australia's two most populous states reflects the gravitational pull of major cities like Sydney and Melbourne, where employment opportunities, established migrant communities, and urban amenities create strong settlement incentives.</p>
                     </div>
                 </div>
 
@@ -80,12 +80,9 @@
                     <div class="chart-header">
                         <h2><i class="fas fa-chart-pie" aria-hidden="true"></i> Regional Migration Sources</h2>
                     </div>
-
-                    <!-- container for dynamic region visualization -->
                     <div id="regionChart" class="chart-container" role="region" aria-labelledby="regionChart-desc"></div>
-
                     <div class="chart-description" id="regionChart-desc">
-                        <p><strong>Data years:</strong> 2023 (aggregated). <strong>Insight:</strong> Asia contributes the largest share — when region counts are few, the chart displays numeric labels inside each area; if many regions would cause overlap it switches to a clearer horizontal bar to maintain readability and accurate comparison.</p>
+                        <p><strong>Data years:</strong> 2023 (aggregated). <strong>Insight:</strong> Asia accounts for the overwhelming majority of migration to Australia, reflecting both geographic proximity and strong historical ties. Europe maintains a significant presence as the second-largest source region, while other continents contribute smaller but notable shares to Australia's diverse migrant population.</p>
                     </div>
                 </div>
             </div>
@@ -96,29 +93,26 @@
                     <div class="chart-header">
                         <h2><i class="fas fa-exchange-alt" aria-hidden="true"></i> Top Source Countries</h2>
                     </div>
-
                     <div id="countryChart" class="chart-container" role="region" aria-labelledby="countryChart-desc"></div>
-
                     <div class="chart-description" id="countryChart-desc">
-                        <p><strong>Data year:</strong> 2023. <strong>Insight:</strong> Top 3 countries are highlighted (colored) while the remaining top-10 are shown in muted colors — this helps emphasize leading origins while keeping full context of the other important contributors.</p>
+                        <p><strong>Data year:</strong> 2023. <strong>Insight:</strong> The top three source countries—United Kingdom, India, and China—collectively represent nearly half of all migration to Australia. The remaining seven countries in the top ten demonstrate the breadth of Australia's migration appeal, spanning from Southeast Asia (Philippines, Vietnam, Malaysia) to South Asia (Sri Lanka, Nepal, Pakistan) and Africa (South Africa), illustrating a truly global migration pattern.</p>
                     </div>
                 </div>
 
                 <div class="chart-box">
-                    <div class="chart-header" style="align-items:center;">
-                        <h2 style="margin-right:12px;"><i class="fas fa-chart-line" aria-hidden="true"></i> Migration Trends Over Time</h2>
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-line" aria-hidden="true"></i> Migration Trends Over Time</h2>
                     </div>
 
-                    <div class="chart-filter" style="margin-bottom:0.75rem;">
-                        <span style="font-weight:600;color:var(--primary);margin-right:8px;">Toggle series:</span>
-                        <label style="font-size:0.9rem;"><input type="checkbox" name="trendSeries" value="arrivals" checked /> Arrivals</label>
-                        <label style="font-size:0.9rem;margin-left:8px;"><input type="checkbox" name="trendSeries" value="departures" checked /> Departures</label>
-                        <label style="font-size:0.9rem;margin-left:8px;"><input type="checkbox" name="trendSeries" value="net" checked /> Net</label>
-                        <small style="margin-left:12px;color:var(--text-light);font-size:0.85rem;">(If you select only one series it will convert to a bar chart for that series.)</small>
+                    <div class="chart-filter-group">
+                        <span>Toggle series:</span>
+                        <label><input type="checkbox" name="trendSeries" value="arrivals" checked /> Arrivals</label>
+                        <label><input type="checkbox" name="trendSeries" value="departures" checked /> Departures</label>
+                        <label><input type="checkbox" name="trendSeries" value="net" checked /> Net</label>
                     </div>
+                    <small class="chart-subtitle">(Selecting a single series converts the view to a bar chart for clearer comparison.)</small>
 
                     <div id="trendChart" class="chart-container" role="region" aria-labelledby="trendChart-desc"></div>
-
                     <div class="chart-description" id="trendChart-desc">
                         <p><strong>Data years:</strong> 2014–2024 (yearly). <strong>Insight:</strong> The COVID-19 period shows sharp declines; examine arrivals vs departures to see recovery patterns. Select a single series to view its absolute bars to aid comparisons in a single metric.</p>
                     </div>
@@ -145,44 +139,29 @@
 
                     <div id="visaChart" class="chart-container" role="region" aria-labelledby="visaChart-desc"></div>
                     <div class="chart-description" id="visaChart-desc">
-                        <p><strong>Data years:</strong> 2013–2024. <strong>Insight:</strong> Temporary visa holders rose sharply after 2021 — consider the implications for labour markets and service demand for temporary cohorts.</p>
+                        <p><strong>Data years:</strong> 2013–2024. <strong>Insight:</strong> Temporary visa holders experienced a dramatic surge post-2021, nearly doubling from pre-pandemic levels by 2022-23. This sharp increase reflects Australia's reopening strategy and growing demand for international students and skilled workers, while permanent migration and citizen returns have remained relatively stable, suggesting a structural shift toward temporary migration pathways.</p>
                     </div>
                 </div>
 
-                <!-- Education chart + table + download -->
                 <div class="chart-box">
                     <div class="chart-header">
-                        <h2><i class="fas fa-graduation-cap" aria-hidden="true"></i> Further Education by Visa Stream (2019)</h2>
+                        <h2><i class="fas fa-graduation-cap" aria-hidden="true"></i> Education Enrollment Rates by Visa Stream and Arrival Period</h2>
                     </div>
 
                     <div id="educationChart" class="chart-container" role="region" aria-labelledby="educationChart-desc"></div>
 
                     <div class="chart-description" id="educationChart-desc">
-                        <p><strong>Data year:</strong> 2019. <strong>Insight:</strong> The donut visualizes the proportion of permanent migrants (age 15–64) enrolled in further education per visa stream; humanitarian and skilled streams have notable shares compared with family stream.</p>
+                        <p><strong>Data year:</strong> 2019. <strong>Insight:</strong> Humanitarian visa holders show the highest education enrollment rates across all arrival periods, particularly those who arrived before 2010 (10%). This reflects both the younger demographic profile of humanitarian migrants and targeted settlement support programs. Skilled migrants maintain moderate enrollment rates, while family stream migrants show the lowest participation, suggesting different priorities and life stages among visa categories.</p>
                     </div>
 
-                    <div style="margin-top:1rem;">
-                        <div style="display:flex;gap:12px;align-items:center;">
-                            <button id="downloadEducationCSV">Download table (CSV)</button>
-                            <button id="showEducationTable" style="background:#fff;border:1px solid var(--border);padding:6px 10px;border-radius:6px;">Toggle table</button>
-                        </div>
+                    <div class="table-controls">
+                        <button id="downloadEducationCSV" class="btn">Download table (CSV)</button>
+                        <button id="showEducationTable" class="btn btn-secondary">View as table</button>
+                        <small class="table-helper-text">For a clearer view of the exact percentages, expand the table below.</small>
+                    </div>
 
-                        <div id="educationTableContainer" style="margin-top:10px;display:none;">
-                            <table id="educationTable" style="width:100%;border-collapse:collapse;">
-                                <thead>
-                                    <tr style="text-align:left;">
-                                        <th>Visa stream</th>
-                                        <th>2015–2019 (%)</th>
-                                        <th>2010–2014 (%)</th>
-                                        <th>Before 2010 (%)</th>
-                                        <th>Total (%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- filled by script.js -->
-                                </tbody>
-                            </table>
-                        </div>
+                    <div id="educationTableContainer" style="display:none;">
+                        <!-- filled by script.js -->
                     </div>
                 </div>
             </div>
@@ -192,14 +171,12 @@
 
     <footer>
         <div class="footer-content">
-            <div class="footer-credits" role="contentinfo">
-                <p><strong>Author:</strong> Muskan Gupta | <strong>Date:</strong> 2025-10-19 | <strong>Data Source:</strong> ABS (latest releases)</p>
-            </div>
+            <p><strong>Author:</strong> Muskan Gupta | <strong>Date:</strong> 2025-10-19 | <strong>Data Source:</strong> ABS (latest releases)</p>
         </div>
     </footer>
 
     <noscript>
-        <div style="padding:1rem;background:#fff3cd;border-left:4px solid #ffecb5;margin:1rem;border-radius:6px;">
+        <div class="noscript-warning">
             <strong>JavaScript is required to view the interactive charts.</strong>
         </div>
     </noscript>
