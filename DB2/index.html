@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Global Migration to Australia Dashboard</title>
+
+    <!-- Performance/preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
+    <!-- Vega / Vega-Lite / vega-embed -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;">Skip to content</a>
+
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-globe-asia" aria-hidden="true"></i> Global Migration to Australia</h1>
+            <p class="subtitle" style="margin-top:0.5rem;">Interactive dashboard — explore origins, settlement, and trends (data years shown per chart).</p>
+        </div>
+    </header>
+
+    <main id="main-content" role="main" class="dashboard-container" aria-labelledby="dashboard-title">
+        <h2 id="dashboard-title" style="display:none">Global Migration to Australia Dashboard</h2>
+
+        <!-- Shortened intro -->
+        <section class="intro-container" role="region" aria-labelledby="about-heading">
+            <h2 id="about-heading"><i class="fas fa-info-circle" aria-hidden="true"></i> About</h2>
+            <div class="intro-text">
+                <p>This dashboard shows major migration flows to Australia, where migrants settle, regional sources, top source countries, and evolving trends. Each chart lists the year(s) of data used.</p>
+            </div>
+        </section>
+
+        <section class="charts-container" aria-live="polite">
+            <!-- Global Migration Flow — large, optionally full-screen -->
+            <div class="chart-row full-width">
+                <div class="chart-box full-width-map" id="mapBox">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-globe-americas" aria-hidden="true"></i> Global Migration Flow</h2>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <label for="mapFullscreenToggle" style="font-size:0.9rem;margin-right:6px;">Full screen</label>
+                            <input id="mapFullscreenToggle" type="checkbox" title="Toggle full screen map" />
+                        </div>
+                    </div>
+
+                    <div id="worldMap" class="chart-container map-container"
+                         role="region"
+                         aria-label="World map showing migration to Australia"
+                         aria-describedby="worldMap-desc">
+                    </div>
+
+                    <div class="chart-description" id="worldMap-desc">
+                        <p><strong>Data year(s):</strong> 2023 (country-level snapshot). <strong>Insight:</strong> Marker size indicates migrant counts — UK, China and India are dominant source countries. Bubble sizes are scaled to avoid excessive overlap with nearby countries while remaining proportional to migrant counts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State / Region / Top sources -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-bar" aria-hidden="true"></i> State Settlement Patterns</h2>
+                    </div>
+                    <div id="stateChart" class="chart-container" role="region" aria-labelledby="stateChart-desc"></div>
+                    <div class="chart-description" id="stateChart-desc">
+                        <p><strong>Data years:</strong> 2023 (snapshot). <strong>Insight:</strong> NSW and VIC together receive the majority share — compare totals to assess distribution across states and plan resource allocation per state (health, education, settlement services).</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-pie" aria-hidden="true"></i> Regional Migration Sources</h2>
+                    </div>
+
+                    <!-- container for dynamic region visualization -->
+                    <div id="regionChart" class="chart-container" role="region" aria-labelledby="regionChart-desc"></div>
+
+                    <div class="chart-description" id="regionChart-desc">
+                        <p><strong>Data years:</strong> 2023 (aggregated). <strong>Insight:</strong> Asia contributes the largest share — when region counts are few, the chart displays numeric labels inside each area; if many regions would cause overlap it switches to a clearer horizontal bar to maintain readability and accurate comparison.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top sources + Trends -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-exchange-alt" aria-hidden="true"></i> Top Source Countries</h2>
+                    </div>
+
+                    <div id="countryChart" class="chart-container" role="region" aria-labelledby="countryChart-desc"></div>
+
+                    <div class="chart-description" id="countryChart-desc">
+                        <p><strong>Data year:</strong> 2023. <strong>Insight:</strong> Top 3 countries are highlighted (colored) while the remaining top-10 are shown in muted colors — this helps emphasize leading origins while keeping full context of the other important contributors.</p>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-header" style="align-items:center;">
+                        <h2 style="margin-right:12px;"><i class="fas fa-chart-line" aria-hidden="true"></i> Migration Trends Over Time</h2>
+                    </div>
+
+                    <div class="chart-filter" style="margin-bottom:0.75rem;">
+                        <span style="font-weight:600;color:var(--primary);margin-right:8px;">Toggle series:</span>
+                        <label style="font-size:0.9rem;"><input type="checkbox" name="trendSeries" value="arrivals" checked /> Arrivals</label>
+                        <label style="font-size:0.9rem;margin-left:8px;"><input type="checkbox" name="trendSeries" value="departures" checked /> Departures</label>
+                        <label style="font-size:0.9rem;margin-left:8px;"><input type="checkbox" name="trendSeries" value="net" checked /> Net</label>
+                        <small style="margin-left:12px;color:var(--text-light);font-size:0.85rem;">(If you select only one series it will convert to a bar chart for that series.)</small>
+                    </div>
+
+                    <div id="trendChart" class="chart-container" role="region" aria-labelledby="trendChart-desc"></div>
+
+                    <div class="chart-description" id="trendChart-desc">
+                        <p><strong>Data years:</strong> 2014–2024 (yearly). <strong>Insight:</strong> The COVID-19 period shows sharp declines; examine arrivals vs departures to see recovery patterns. Select a single series to view its absolute bars to aid comparisons in a single metric.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visa & Education -->
+            <div class="chart-row">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-layer-group" aria-hidden="true"></i> Visa &amp; Citizenship Groups</h2>
+                    </div>
+
+                    <div class="chart-filter">
+                        <label for="visaTypeFilter">View by Visa Type:</label>
+                        <select id="visaTypeFilter" aria-controls="visaChart">
+                            <option value="All">All Visa Types</option>
+                            <option value="temporary">Temporary</option>
+                            <option value="australian">Australian Citizens</option>
+                            <option value="permanent">Permanent</option>
+                            <option value="nz">New Zealand Citizens</option>
+                        </select>
+                    </div>
+
+                    <div id="visaChart" class="chart-container" role="region" aria-labelledby="visaChart-desc"></div>
+                    <div class="chart-description" id="visaChart-desc">
+                        <p><strong>Data years:</strong> 2013–2024. <strong>Insight:</strong> Temporary visa holders rose sharply after 2021 — consider the implications for labour markets and service demand for temporary cohorts.</p>
+                    </div>
+                </div>
+
+                <!-- Education chart + table + download -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-graduation-cap" aria-hidden="true"></i> Further Education by Visa Stream (2019)</h2>
+                    </div>
+
+                    <div id="educationChart" class="chart-container" role="region" aria-labelledby="educationChart-desc"></div>
+
+                    <div class="chart-description" id="educationChart-desc">
+                        <p><strong>Data year:</strong> 2019. <strong>Insight:</strong> The donut visualizes the proportion of permanent migrants (age 15–64) enrolled in further education per visa stream; humanitarian and skilled streams have notable shares compared with family stream.</p>
+                    </div>
+
+                    <div style="margin-top:1rem;">
+                        <div style="display:flex;gap:12px;align-items:center;">
+                            <button id="downloadEducationCSV">Download table (CSV)</button>
+                            <button id="showEducationTable" style="background:#fff;border:1px solid var(--border);padding:6px 10px;border-radius:6px;">Toggle table</button>
+                        </div>
+
+                        <div id="educationTableContainer" style="margin-top:10px;display:none;">
+                            <table id="educationTable" style="width:100%;border-collapse:collapse;">
+                                <thead>
+                                    <tr style="text-align:left;">
+                                        <th>Visa stream</th>
+                                        <th>2015–2019 (%)</th>
+                                        <th>2010–2014 (%)</th>
+                                        <th>Before 2010 (%)</th>
+                                        <th>Total (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- filled by script.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-credits" role="contentinfo">
+                <p><strong>Author:</strong> Muskan Gupta | <strong>Date:</strong> 2025-10-19 | <strong>Data Source:</strong> ABS (latest releases)</p>
+            </div>
+        </div>
+    </footer>
+
+    <noscript>
+        <div style="padding:1rem;background:#fff3cd;border-left:4px solid #ffecb5;margin:1rem;border-radius:6px;">
+            <strong>JavaScript is required to view the interactive charts.</strong>
+        </div>
+    </noscript>
+
+    <script src="script.js"></script>
+</body>
+</html>
